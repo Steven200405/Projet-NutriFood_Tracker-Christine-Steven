@@ -1,8 +1,53 @@
-<p>HELLO</p>
-  <h2>{{ product.product_name }}</h2>
-  <img [src]="product.image_url" alt="{{ product.product_name }}" width="150">
-  <p><strong>Marque :</strong> {{ product.brands }}</p>
-  <p><strong>NutriScore :</strong> {{ product.nutriscore_grade | uppercase }}</p>
-  <p><strong>ÉcoScore :</strong> {{ product.ecoscore_grade | uppercase }}</p>
-  <p><strong>Calories :</strong> {{ product.nutriments['energy-kcal_100g'] }} kcal / 100g</p>
+<div class="headbar">
+    <!-- HEADER (juste l'entête) -->
+    <app-header [title]="pageTitle" (menu)="sidenav.toggle()">
+    </app-header>
+</div>
 
+<div class = "container-fluid flex-grow-1 d-flex">
+    <mat-sidenav-container class="flex-grow-1">
+
+        <!-- SIDEBAR -->
+        <mat-sidenav #sidenav mode="side" class="border-end sidenav"> >
+            <mat-nav-list class="pt-3">
+                <a mat-list-item routerLink="accueil" (click)="sidenav.close()">
+                    <mat-icon class="me-2">home</mat-icon>
+                    Accueil
+                </a>
+
+                <a mat-list-item routerLink="questionnaire" (click)="sidenav.close()">
+                    <mat-icon class="me-2">assignment</mat-icon>
+                    Questionnaire
+                </a>
+
+                <a mat-list-item routerLink="resultats" (click)="sidenav.close()">
+                    <mat-icon class="me-2">description</mat-icon>
+                    Résultats
+                </a>
+
+                <a mat-list-item routerLink="conseils" (click)="sidenav.close()">
+                    <mat-icon class="me-2">emoji_objects</mat-icon>
+                    Conseil
+                </a>
+
+                <a mat-list-item routerLink="profil" (click)="sidenav.close()">
+                    <mat-icon class="me-2">person</mat-icon>
+                    Profil
+                </a>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <!-- CONTENU -->
+        <mat-sidenav-content>
+
+            <main class="p-4 main">
+                <router-outlet></router-outlet>
+
+            </main>
+
+
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>
+<app-footer></app-footer>

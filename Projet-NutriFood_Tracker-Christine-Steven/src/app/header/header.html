@@ -1,1 +1,13 @@
-<p>header works!</p>
+<header><!-- Barre d'outils en haut -->
+    <mat-toolbar color="primary" class="d-flex align-items-center">
+        <button mat-icon-button (click)="onMenuClick()" aria-label="Menu">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span class="ms-2 fw-semibold fs-5">{{ title }}</span>
+
+        <span class="flex-grow-1"></span>
+        <button mat-icon-button routerLink="profil">
+            <mat-icon>account_circle</mat-icon>
+        </button>
+    </mat-toolbar>
+</header>

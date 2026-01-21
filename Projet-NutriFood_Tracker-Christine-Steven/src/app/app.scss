@@ -1,0 +1,15 @@
+.sidenav{
+    width: 260px;
+}
+
+.headbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main {
+    min-height: calc(100vh - 64px - 44.73px); // Adjust based on header and footer heights
+}
