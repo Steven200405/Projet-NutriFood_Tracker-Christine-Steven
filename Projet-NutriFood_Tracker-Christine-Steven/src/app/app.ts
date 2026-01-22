@@ -1,24 +1,25 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { Header } from './header/header';
-import { Footer } from './footer/footer';
+import { Header } from './shared/header/header';
+import { Footer } from './shared/footer/footer';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { Sidebar } from "./shared/sidebar/sidebar";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, 
+  imports: [RouterOutlet,
     RouterLink,
-    Header, 
-    Footer, 
+    Header,
+    Footer,
     MatSidenavModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule],
+    MatListModule, Sidebar],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

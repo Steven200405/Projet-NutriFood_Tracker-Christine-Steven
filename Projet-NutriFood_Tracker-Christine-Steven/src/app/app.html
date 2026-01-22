@@ -4,11 +4,10 @@
     </app-header>
 </div>
 
-<div class = "container-fluid flex-grow-1 d-flex">
+<div class = "container-fluid px-0 flex-grow-1 d-flex">
     <mat-sidenav-container class="flex-grow-1">
 
-        <!-- SIDEBAR -->
-        <mat-sidenav #sidenav mode="side" class="border-end sidenav"> >
+        <mat-sidenav #sidenav mode="side" class="border-end sidenav"> 
             <mat-nav-list class="pt-3">
                 <a mat-list-item routerLink="accueil" (click)="sidenav.close()">
                     <mat-icon class="me-2">home</mat-icon>
@@ -20,12 +19,12 @@
                     Questionnaire
                 </a>
 
-                <a mat-list-item routerLink="resultats" (click)="sidenav.close()">
+                <a mat-list-item routerLink="resultat" (click)="sidenav.close()">
                     <mat-icon class="me-2">description</mat-icon>
                     Résultats
                 </a>
 
-                <a mat-list-item routerLink="conseils" (click)="sidenav.close()">
+                <a mat-list-item routerLink="conseil" (click)="sidenav.close()">
                     <mat-icon class="me-2">emoji_objects</mat-icon>
                     Conseil
                 </a>
@@ -37,7 +36,6 @@
             </mat-nav-list>
         </mat-sidenav>
 
-        <!-- CONTENU -->
         <mat-sidenav-content>
 
             <main class="p-4 main">

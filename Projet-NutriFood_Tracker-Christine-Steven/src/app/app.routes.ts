@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { Accueil } from './accueil/accueil';
-import { Questionnaire } from './questionnaire/questionnaire';
-import { Resultat } from './resultat/resultat';
-import { Conseil } from './conseil/conseil';
-import { Profil } from './profil/profil';
-import { Recherche } from './recherche/recherche';
+import { Accueil } from './features/accueil/accueil';
+import { Questionnaire } from './features/questionnaire/questionnaire';
+import { Resultat } from './features/resultat/resultat';
+import { Conseil } from './features/conseil/conseil';
+import { Profil } from './features/profil/profil';
+import { Recherche } from './features/recherche/recherche';
 
 export const routes: Routes = [
     {path: '', component: Accueil},

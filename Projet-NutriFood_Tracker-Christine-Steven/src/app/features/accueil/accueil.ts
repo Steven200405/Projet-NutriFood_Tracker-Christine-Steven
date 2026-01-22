@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ServiceOpenFoodFact } from '../services/service-open-food-fact';
+import { ServiceOpenFoodFact } from '../../services/service-open-food-fact';
 import { UpperCasePipe } from '@angular/common';
 
 @Component({
