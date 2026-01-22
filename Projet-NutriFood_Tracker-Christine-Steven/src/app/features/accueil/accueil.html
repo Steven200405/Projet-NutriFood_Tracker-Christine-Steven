@@ -1,9 +1,56 @@
-<p>HELLO</p>
-  <h2>{{ product.product_name }}</h2>
-  <img [src]="product.image_url" alt="{{ product.product_name }}" width="150">
-  <p><strong>Marque :</strong> {{ product.brands }}</p>
-  <p><strong>NutriScore :</strong> {{ product.nutriscore_grade | uppercase }}</p>
-  <p><strong>ÉcoScore :</strong> {{ product.ecoscore_grade | uppercase }}</p>
-  <p><strong>Calories :</strong> {{ product.nutriments['energy-kcal_100g'] }} kcal / 100g</p>
+<div class="container mt-4">
 
-  
+  <div class="col-12 mb-4">
+    <mat-card class="p-3" appearance="outlined">
+      <h2 class="mb-2">Bienvenue sur NutriFood_Tracker</h2>
+      <p class="mt-4 mb-4">
+        Répondez à notre questionnaire pour obtenir des recommandations personnalisées !
+      </p>
+    </mat-card>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Questionnaire -->
+    <div class="col-12 col-md-4">
+      <mat-card class="h-100 d-flex align-items-center p-3" appearance="outlined">
+        <mat-icon class="mb-2 big-icon">assignment</mat-icon>
+        <h6>Répondez à un questionnaire</h6>
+        <p class="small">Calculer votre nutri-score</p>
+
+        <a mat-raised-button class="button-link" routerLink="/questionnaire">
+          Commencer
+        </a>
+      </mat-card>
+    </div>
+
+    <!-- Résultats -->
+    <div class="col-12 col-md-4">
+      <mat-card class="h-100 d-flex align-items-center p-3" appearance="outlined">
+        <mat-icon class="mb-2 big-icon">description</mat-icon>
+        <h6>Voir vos résultats</h6>
+        <p class="small">Consultez vos anciens questionnaires</p>
+
+        <a mat-raised-button class="button-link" routerLink="/resultat">
+          Voir
+        </a>
+      </mat-card>
+    </div>
+
+    <!-- Conseils -->
+    <div class="col-12 col-md-4">
+      <mat-card class="h-100 d-flex align-items-center p-3" appearance="outlined">
+        <mat-icon class="mb-2 big-icon">emoji_objects</mat-icon>
+        <h6>Explorer les conseils</h6>
+        <p class="small">
+          Profitez des conseils nutritionnelles personnalisés
+        </p>
+
+        <a mat-raised-button class="button-link" routerLink="/conseil">
+          Allons-y
+        </a>
+      </mat-card>
+    </div>
+
+  </div>
+</div>

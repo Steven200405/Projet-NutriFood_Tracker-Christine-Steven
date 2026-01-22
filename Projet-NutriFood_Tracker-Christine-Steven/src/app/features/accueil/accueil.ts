@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { ServiceOpenFoodFact } from '../../services/service-open-food-fact';
-import { UpperCasePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-accueil',
-  imports: [UpperCasePipe],
+  imports: [RouterLink, MatCardModule, MatIconModule],
   templateUrl: './accueil.html',
   styleUrl: './accueil.scss',
 })
