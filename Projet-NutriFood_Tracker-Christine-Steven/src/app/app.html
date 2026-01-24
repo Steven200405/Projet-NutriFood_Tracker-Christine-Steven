@@ -1,1 +1,51 @@
-<button (click)="runTest()">Lancer le test</button>
+<div class="headbar">
+    <!-- HEADER (juste l'entête) -->
+    <app-header [title]="pageTitle" (menu)="sidenav.toggle()">
+    </app-header>
+</div>
+
+<div class = "container-fluid px-0 flex-grow-1 d-flex">
+    <mat-sidenav-container class="flex-grow-1">
+
+        <mat-sidenav #sidenav mode="side" class="border-end sidenav">
+            <mat-nav-list class="pt-3">
+                <a mat-list-item routerLink="accueil" (click)="sidenav.close()">
+                    <mat-icon class="me-2">home</mat-icon>
+                    Accueil
+                </a>
+
+                <a mat-list-item routerLink="questionnaire" (click)="sidenav.close()">
+                    <mat-icon class="me-2">assignment</mat-icon>
+                    Questionnaire
+                </a>
+
+                <a mat-list-item routerLink="resultat" (click)="sidenav.close()">
+                    <mat-icon class="me-2">description</mat-icon>
+                    Résultats
+                </a>
+
+                <a mat-list-item routerLink="conseil" (click)="sidenav.close()">
+                    <mat-icon class="me-2">emoji_objects</mat-icon>
+                    Conseil
+                </a>
+
+                <a mat-list-item routerLink="profil" (click)="sidenav.close()">
+                    <mat-icon class="me-2">person</mat-icon>
+                    Profil
+                </a>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+
+            <main class="p-4 main">
+                <router-outlet></router-outlet>
+
+            </main>
+
+
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>
+<app-footer></app-footer>
