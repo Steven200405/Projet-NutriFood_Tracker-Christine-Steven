@@ -11,8 +11,27 @@
             <mat-icon class="icon-search icon">search</mat-icon>
         </button>
 
-        <button mat-icon-button class="btn" (click)="onProfileClick()">
+        <button mat-icon-button class="btn" [matMenuTriggerFor]="profileMenu" aria-label="Menu profil">
             <mat-icon class="icon">account_circle</mat-icon>
         </button>
+
+        <mat-menu #profileMenu = "matMenu">
+        @if (isLoggedIn) {
+            <button mat-menu-item (click)="goProfile()">
+                <mat-icon>person</mat-icon>
+                <span>Profil</span>
+            </button>
+
+            <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+            </button>
+        } @else {
+            <button mat-menu-item (click)="goLogin()">
+                <mat-icon>login</mat-icon>
+                <span>Login</span>
+            </button>
+        }
+        </mat-menu>
     </mat-toolbar>
 </header>

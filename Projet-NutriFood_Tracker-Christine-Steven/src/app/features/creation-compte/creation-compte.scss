@@ -39,6 +39,27 @@
   height: 44px;
   border-radius: 8px;
   font-weight: 600;
+  display: block;
+  margin: auto;
+  padding: 10px 30px;
+  color: #ffffff;
+  background-color: #6f9f84;
+  font-size: 14px;
+  border: none;
+  line-height: 1.2;
+}
+
+.submit:hover {
+  background-color: #658f77;
+}
+
+.submit:active {
+  background-color: #5b806a;
+}
+
+.submit:disabled {
+  background-color: #c9c9c9;
+  cursor: not-allowed;
 }
 
 .loading {
@@ -52,15 +73,20 @@
 }
 
 .footer {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  font-size: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    font-size: 14px;
+}
 
-  a {
+.footer a {
     font-weight: 600;
     text-decoration: underline;
-  }
+    cursor: pointer;
+}
+
+.footer a:hover {
+    text-decoration-thickness: 2px;
 }
 
 .server-error {

@@ -5,7 +5,8 @@ import { Resultat } from './features/resultat/resultat';
 import { Conseil } from './features/conseil/conseil';
 import { Profil } from './features/profil/profil';
 import { Recherche } from './features/recherche/recherche';
-import { RegisterComponent } from './features/creation-compte/creation-compte';
+import { CreationCompte } from './features/creation-compte/creation-compte';
+import { ConnexionCompte } from './features/connexion-compte/connexion-compte';
 
 export const routes: Routes = [
     {path: '', component: Accueil},
@@ -14,7 +15,8 @@ export const routes: Routes = [
     {path: 'resultat', component: Resultat},
     {path: 'conseil', component: Conseil},
     {path: 'profil', component: Profil},
-    {path: 'register', component: RegisterComponent},
+    {path: 'register', component: CreationCompte},
     {path: 'recherche', component: Recherche},
+    { path: 'login', component: ConnexionCompte },
     { path: '**', redirectTo: 'accueil'}
 ];
