@@ -5,6 +5,7 @@ import { Resultat } from './features/resultat/resultat';
 import { Conseil } from './features/conseil/conseil';
 import { Profil } from './features/profil/profil';
 import { Recherche } from './features/recherche/recherche';
+import { RegisterComponent } from './features/creation-compte/creation-compte';
 
 export const routes: Routes = [
     {path: '', component: Accueil},
@@ -13,6 +14,7 @@ export const routes: Routes = [
     {path: 'resultat', component: Resultat},
     {path: 'conseil', component: Conseil},
     {path: 'profil', component: Profil},
+    {path: 'register', component: RegisterComponent},
     {path: 'recherche', component: Recherche},
     { path: '**', redirectTo: 'accueil'}
 ];
