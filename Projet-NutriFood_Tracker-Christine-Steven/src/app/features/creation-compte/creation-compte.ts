@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ProfileService } from '../../core/storage/services/profile.service';
 import { confirmPasswordValidator } from '../../validators/confirm-password.validator';
 import { AuthService } from '../../core/storage/services/auth.service';
 
@@ -35,8 +34,7 @@ import { AuthService } from '../../core/storage/services/auth.service';
 export class RegisterComponent {
   public hidePassword = true;
   public hideConfirm = true;
-  public loading = false;
-  public serverError: string | null = null;
+  public serverError: string | null = null; // Affiche les erreurs serveur de manière dynamique
 
   public form: FormGroup = new FormGroup(
       {
@@ -48,40 +46,27 @@ export class RegisterComponent {
     },
     { validators: confirmPasswordValidator }
   );
-  constructor (private authService: AuthService, private profileService: ProfileService, private routerService: Router) {}
+  constructor (private authService: AuthService, private routerService: Router) {}
 
-  get f() {
-    return this.form.controls;
-  }
-
-  async submit() {
+  public async submit(): Promise<void> {
     this.serverError = null;
 
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
+      this.form.markAllAsTouched();// affiche les erreurs de validation
+      return; // et arrête la soumission
     }
 
-    const { email, password, firstName, lastName } = this.form.getRawValue();
-    if (!email || !password || !firstName || !lastName) return;
-
     try {
-      this.loading = true;
-
-      await this.authService.register(email, password);
-
-      this.profileService.updateConnectedUser({ firstName, lastName });
-
-      await this.routerService.navigateByUrl('/profil');
+      await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value); // on crée le compte
+      this.routerService.navigateByUrl('/accueil');
+      alert('Compte créé avec succès !');
     } catch (e: any) {
-      const msg = String(e?.message || e);
+      const msg = e instanceof Error ? e.message : '';
       if (msg.includes('EMAIL_ALREADY_USED')) {
         this.serverError = 'Cet email est déjà utilisé.';
       } else {
-        this.serverError = 'Impossible de créer le compte. Réessaie.';
+        this.serverError = 'Impossible de créer le compte. Réessayez.';
       }
-    } finally {
-      this.loading = false;
     }
   }
 }

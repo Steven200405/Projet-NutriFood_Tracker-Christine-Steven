@@ -11,7 +11,7 @@
           <mat-form-field appearance="outline" class="full">
             <mat-label>Nom</mat-label>
             <input matInput placeholder="Dupont" formControlName="lastName" autocomplete="family-name" />
-            @if (f['lastName'].touched && f['lastName'].hasError('required')) {
+            @if (form.controls['lastName'].touched && form.controls['lastName'].hasError('required')) {
               <mat-error>Le nom est obligatoire.</mat-error>
             }
           </mat-form-field>
@@ -19,7 +19,7 @@
           <mat-form-field appearance="outline" class="full">
             <mat-label>Prénom</mat-label>
             <input matInput placeholder="Jean" formControlName="firstName" autocomplete="given-name" />
-            @if (f['firstName'].touched && f['firstName'].hasError('required')) {
+            @if (form.controls['firstName'].touched && form.controls['firstName'].hasError('required')) {
               <mat-error>Le prénom est obligatoire.</mat-error>
             }
           </mat-form-field>
@@ -29,9 +29,9 @@
           <mat-label>Email</mat-label>
           <input matInput placeholder="example@example.com" formControlName="email" autocomplete="email" />
 
-          @if (f['email'].touched && f['email'].hasError('required')) {
+          @if (form.controls['email'].touched && form.controls['email'].hasError('required')) {
             <mat-error>L’email est obligatoire.</mat-error>
-          } @else if (f['email'].touched && f['email'].hasError('email')) {
+          } @else if (form.controls['email'].touched && form.controls['email'].hasError('email')) {
             <mat-error>Format d’email invalide.</mat-error>
           }
         </mat-form-field>
@@ -43,20 +43,22 @@
             [type]="hidePassword ? 'password' : 'text'"
             formControlName="password"
             autocomplete="new-password"
-          />
+          /> <!-- hidePassword est un booléen lié au bouton "oeil" qui permet de basculer entre afficher/masquer le mot de passe
+                  autocomplete indique au navigateur que le mot de passe est nouveau -->
           <button
             type="button"
             mat-icon-button
             matSuffix
             (click)="hidePassword = !hidePassword"
             [attr.aria-label]="'Afficher/masquer le mot de passe'"
-          >
+          > <!-- attr.aria-label décrit le bouton pour les lecteurs d'écran -->
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <!-- à chaque clique, l'icône "oeil" est barré ou ouvert-->
           </button>
 
-          @if (f['password'].touched && f['password'].hasError('required')) {
+          @if (form.controls['password'].touched && form.controls['password'].hasError('required')) {
             <mat-error>Le mot de passe est obligatoire.</mat-error>
-          } @else if (f['password'].touched && f['password'].hasError('minlength')) {
+          } @else if (form.controls['password'].touched && form.controls['password'].hasError('minlength')) {
             <mat-error>Minimum 6 caractères.</mat-error>
           }
         </mat-form-field>
@@ -79,10 +81,6 @@
             <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
 
-          @if (f['confirmPassword'].touched && f['confirmPassword'].hasError('required')) {
-            <mat-error>La confirmation est obligatoire.</mat-error>
-          }
-
           @if (form.touched && form.hasError('passwordsMismatch')) {
             <mat-error>Les mots de passe ne correspondent pas.</mat-error>
           }
@@ -92,15 +90,8 @@
           <div class="server-error">{{ serverError }}</div>
         }
 
-        <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="loading">
-          @if (!loading) {
-            S’inscrire
-          } @else {
-            <span class="loading">
-              <mat-progress-spinner diameter="18" mode="indeterminate"></mat-progress-spinner>
-              <span>Création...</span>
-            </span>
-          }
+        <button mat-raised-button color="primary" class="submit" type="submit" [disabled]="!form.valid">
+          S'inscrire
         </button>
 
         <mat-divider class="divider"></mat-divider>
