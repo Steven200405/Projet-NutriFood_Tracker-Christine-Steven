@@ -1,1 +1,64 @@
-<p>connexion-compte works!</p>
+<div class="page">
+  <mat-card class="login-card">
+    <mat-card-header class="header">
+      <mat-card-title>Connexion</mat-card-title>
+      <mat-card-subtitle>Connectez-vous à votre compte</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="example@example.com" formControlName="email" autocomplete="email" />
+
+          @if (form.controls['email'].touched && form.controls['email'].hasError('required')) {
+            <mat-error>L’email est obligatoire.</mat-error>
+          } @else if (form.controls['email'].touched && form.controls['email'].hasError('email')) {
+            <mat-error>Format d’email invalide.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Mot de passe</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Afficher/masquer le mot de passe'"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+
+          @if (form.controls['password'].touched && form.controls['password'].hasError('required')) {
+            <mat-error>Le mot de passe est obligatoire.</mat-error>
+          } @else if (form.controls['password'].touched && form.controls['password'].hasError('minlength')) {
+            <mat-error>Minimum 6 caractères.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (serverError) {
+          <div class="server-error">{{ serverError }}</div>
+        }
+
+        <button class="valid" type="submit" [disabled]="!form.valid">
+            Se connecter
+        </button>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="footer">
+          <span>Pas de compte ?</span>
+          <a routerLink="/register">Créer un compte</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

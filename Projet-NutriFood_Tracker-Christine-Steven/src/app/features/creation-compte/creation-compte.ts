@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { confirmPasswordValidator } from '../../validators/confirm-password.validator';
 import { AuthService } from '../../core/storage/services/auth.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -26,12 +27,13 @@ import { AuthService } from '../../core/storage/services/auth.service';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './creation-compte.html',
   styleUrls: ['./creation-compte.scss']
 })
-export class RegisterComponent {
+export class CreationCompte {
   public hidePassword = true;
   public hideConfirm = true;
   public serverError: string | null = null; // Affiche les erreurs serveur de manière dynamique
@@ -46,7 +48,7 @@ export class RegisterComponent {
     },
     { validators: confirmPasswordValidator }
   );
-  constructor (private authService: AuthService, private routerService: Router) {}
+  constructor (private authService: AuthService, private routerService: Router, private snackBar: MatSnackBar) {}
 
   public async submit(): Promise<void> {
     this.serverError = null;
@@ -59,7 +61,7 @@ export class RegisterComponent {
     try {
       await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value); // on crée le compte
       this.routerService.navigateByUrl('/accueil');
-      alert('Compte créé avec succès !');
+      this.snackBar.open('Compte créé avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {
       const msg = e instanceof Error ? e.message : '';
       if (msg.includes('EMAIL_ALREADY_USED')) {
