@@ -59,7 +59,7 @@ export class CreationCompte {
     }
 
     try {
-      await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value); // on crée le compte
+      await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value, this.form.controls['lastName'].value, this.form.controls['firstName'].value); // on crée le compte
       this.routerService.navigateByUrl('/accueil');
       this.snackBar.open('Compte créé avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {

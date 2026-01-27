@@ -15,7 +15,7 @@ export interface User {
   nutritionGoal: NutritionGoal | null;
   diet: DietType | null;
   physicalActivity: PhysicalActivity | null;
-  allergies: Allergy[];
+  allergies: Allergy[] | [];
 
   createdAt: string;
   updatedAt: string;
