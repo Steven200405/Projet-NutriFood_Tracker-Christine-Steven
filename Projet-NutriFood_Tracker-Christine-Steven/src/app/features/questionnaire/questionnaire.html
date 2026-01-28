@@ -3,7 +3,7 @@
 
     <form [formGroup]="formQuestions">
         <h3>{{ currentQuestion.title }}</h3>
-        <!-- Q1 à Q5 (simples)-->
+        <!-- Q1 à Q5 -->
         @if (indexQuestionnaire < 5) { <mat-radio-group [formControl]="getControl(currentQuestion.id)">
             @for (opt of currentQuestion.options; track opt.label) {
             <mat-radio-button [value]="opt.points">
@@ -12,11 +12,6 @@
             <br />
             }
             </mat-radio-group>
-
-            @if (formQuestions.get(currentQuestion.id)?.touched && formQuestions.get(currentQuestion.id)?.invalid) {
-            <br>
-            <div class="error">Veuillez sélectionner une réponse à la question</div>
-            }
             }
             <!-- Q6-->
             @if (indexQuestionnaire === 5) {
@@ -28,10 +23,6 @@
                 </mat-checkbox>
                 }
             </mat-radio-group>
-
-            @if (formQuestions.get(currentQuestion.id)?.touched && formQuestions.get(currentQuestion.id)?.invalid) {
-            <div class="error">Sélectionnez au moins une catégorie</div>
-            }
             }
 
             <!-- Q7-->
@@ -41,7 +32,6 @@
                     <mat-card-title>Sélectionnez une catégorie</mat-card-title>
                 </mat-card-header>
 
-                <!-- Catégories (Material Chips) -->
                 <mat-card-content>
                     <mat-chip-listbox class="d-flex flex-wrap gap-2" aria-label="Catégories">
                         @for (catName of formQuestions.controls.q6.value; track catName) {
@@ -76,7 +66,7 @@
                     <div class="container-fluid px-0 mt-3">
 
                         <div class="row g-2 mt-2">
-                            @for (p of q7Products; track p.code) {
+                            @for (p of searchResults; track p.code) {
                             <div class="col-12 col-md-6 col-xl-4">
                                 <mat-card class="h-60">
                                     <mat-card-content class="d-flex align-items-center justify-content-between gap-2">
@@ -101,50 +91,53 @@
                             }
                         </div>
                     </div>
-                        <!-- Sélections -->
-                        <mat-card class="mt-3">
-                            <mat-card-header>
-                                <mat-card-title>Sélections (max 3)</mat-card-title>
-                            </mat-card-header>
+                    <!-- Sélections -->
+                    <mat-card class="mt-3">
+                        <mat-card-header>
+                            <mat-card-title>Sélections (max 3)</mat-card-title>
+                        </mat-card-header>
 
-                            <mat-card-content>
-                                @if ((selectedProductsByCategory[activeCategoryName]?.length ?? 0) === 0) {
-                                <div class="text-muted">Aucun produit sélectionné pour cette catégorie.</div>
-                                } @else {
-                                <div class="d-flex flex-column gap-2">
-                                    @for (s of (selectedProductsByCategory[activeCategoryName] ?? []); track s.code) {
-                                    <div class="d-flex justify-content-between align-items-center border rounded p-2">
-                                        <div class="d-flex align-items-center gap-2 overflow-hidden">
-                                            <img [src]="s.image_url" alt="" class="rounded flex-shrink-0"
-                                                style="width:40px;height:40px;object-fit:cover;" />
-                                            <div class="overflow-hidden">
-                                                <div class="fw-semibold text-truncate">{{ s.product_name }}</div>
-                                                <div class="text-muted small text-truncate">
-                                                    {{ s.brand ? s.brand : 'Marque inconnue' }}
-                                                </div>
+                        <mat-card-content>
+                            @if ((selectedProductsByCategory[activeCategoryName]?.length ?? 0) === 0) {
+                            <div class="text-muted">Aucun produit sélectionné pour cette catégorie.</div>
+                            } @else {
+                            <div class="d-flex flex-column gap-2">
+                                @for (s of (selectedProductsByCategory[activeCategoryName] ?? []); track s.code) {
+                                <div class="d-flex justify-content-between align-items-center border rounded p-2">
+                                    <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                        <img [src]="s.image_url" alt="" class="rounded flex-shrink-0"
+                                            style="width:40px;height:40px;object-fit:cover;" />
+                                        <div class="overflow-hidden">
+                                            <div class="fw-semibold text-truncate">{{ s.product_name }}</div>
+                                            <div class="text-muted small text-truncate">
+                                                {{ s.brand ? s.brand : 'Marque inconnue' }}
                                             </div>
                                         </div>
-
-                                        <button mat-button color="warn" type="button" (click)="removeProductQ7(s.code)">
-                                            Retirer
-                                        </button>
                                     </div>
-                                    }
+
+                                    <button mat-button color="warn" type="button" (click)="removeProductQ7(s.code)">
+                                        Retirer
+                                    </button>
                                 </div>
                                 }
+                            </div>
+                            }
 
-                                @if (formQuestions.controls.q7.value.length === 0) {
-                                <div class="text-danger mt-2">
-                                    Ajoute au moins 1 produit pour continuer.
-                                </div>
-                                }
-                            </mat-card-content>
-                        </mat-card>
-
-                        }
-                        }
+                            @if (formQuestions.controls.q7.value.length === 0) {
+                            <div class="text-danger mt-2">
+                                Ajoute au moins 1 produit pour continuer.
+                            </div>
+                            }
+                        </mat-card-content>
+                    </mat-card>
+                    }
+                    }
                 </mat-card-content>
             </mat-card>
+            }
+            @if (formQuestions.get(currentQuestion.id)?.touched &&
+            formQuestions.get(currentQuestion.id)?.invalid) {
+            <div class="alert alert-danger m-3" role="alert">Sélectionnez au moins une catégorie</div>
             }
             <div class="actions">
                 <button type="button" class="button-link" (click)="previousQuestion()"

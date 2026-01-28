@@ -24,7 +24,7 @@ export class ServiceOpenFoodFact {
     }
     params = params.append('countries_tags', 'en:france'); // Limiter que les produits français
 
-    return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrl}/api/v2/search`, { params })
+    return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrl}`, { params })
       .pipe(map(res => res.products.map(p => this.mapToProduit(p))));
   }
 
