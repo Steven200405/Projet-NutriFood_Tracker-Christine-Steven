@@ -1,28 +1,33 @@
 <mat-sidenav #sidenav mode="side" class="border-end sidenav">
-            <mat-nav-list class="pt-3">
-                <a mat-list-item routerLink="accueil" class="mat-list-item" (click)="sidenav.close()">
-                    <mat-icon class="me-2">home</mat-icon>
-                    Accueil
-                </a>
+    <mat-nav-list class="pt-3">
+        <a mat-list-item routerLink="accueil" class="mat-list-item" (click)="sidenav.close()">
+            <mat-icon class="me-2">home</mat-icon>
+            Accueil
+        </a>
 
-                <a mat-list-item routerLink="questionnaire" (click)="sidenav.close()">
-                    <mat-icon class="me-2">assignment</mat-icon>
-                    Questionnaire
-                </a>
+        <a mat-list-item routerLink="questionnaire" (click)="sidenav.close()">
+            <mat-icon class="me-2">assignment</mat-icon>
+            Questionnaire
+        </a>
 
-                <a mat-list-item routerLink="resultats" (click)="sidenav.close()">
-                    <mat-icon class="me-2">description</mat-icon>
-                    Résultats
-                </a>
+        <a mat-list-item routerLink="recherche" (click)="sidenav.close()">
+            <mat-icon class="me-2">search</mat-icon>
+            Recherche
+        </a>
 
-                <a mat-list-item routerLink="conseils" (click)="sidenav.close()">
-                    <mat-icon class="me-2">emoji_objects</mat-icon>
-                    Conseil
-                </a>
+        <a mat-list-item routerLink="resultats" (click)="sidenav.close()">
+            <mat-icon class="me-2">description</mat-icon>
+            Résultats
+        </a>
 
-                <a mat-list-item routerLink="profil" (click)="sidenav.close()">
-                    <mat-icon class="me-2">person</mat-icon>
-                    Profil
-                </a>
-            </mat-nav-list>
-        </mat-sidenav>
+        <a mat-list-item routerLink="conseils" (click)="sidenav.close()">
+            <mat-icon class="me-2">emoji_objects</mat-icon>
+            Conseil
+        </a>
+
+        <a mat-list-item routerLink="profil" (click)="sidenav.close()">
+            <mat-icon class="me-2">person</mat-icon>
+            Profil
+        </a>
+    </mat-nav-list>
+</mat-sidenav>

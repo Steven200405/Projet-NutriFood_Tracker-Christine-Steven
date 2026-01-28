@@ -12,7 +12,7 @@ export class ServiceOpenFoodFact {
 
   constructor(private http: HttpClient) { }
 
-  searchProducts(categoryTags: string[], pageSize: number = 20): Observable<Produit[]> {
+  searchProductsWithCategories(categoryTags: string[], pageSize: number = 20): Observable<Produit[]> {
 
     let params = new HttpParams()
       .set('page_size', String(pageSize))
@@ -27,6 +27,20 @@ export class ServiceOpenFoodFact {
     return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrl}`, { params })
       .pipe(map(res => res.products.map(p => this.mapToProduit(p))));
   }
+
+  searchProducts(query: string, pageSize: number = 20): Observable<Produit[]> {
+
+    let params = new HttpParams()
+      .set('page_size', String(pageSize))
+      .set('fields', 'code,product_name,brands,image_url,nutrition_grades,allergens')
+      .set('sort_by', 'popularity_key')
+      .set('search_terms', query);
+    params = params.append('countries_tags', 'en:france'); // Limiter que les produits français
+
+    return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrl}`, { params })
+      .pipe(map(res => res.products.map(p => this.mapToProduit(p))));
+  }
+
 
   private mapToProduit(p: any): Produit {
     return {

@@ -1,1 +1,70 @@
-<p>recherche works!</p>
+<mat-card class="p-3">
+  <mat-card-header class="mb-2">
+    <mat-card-title>Rechercher un aliment</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p class="text-muted mb-3">
+      Astuce : écris le nom le plus précis possible (marque + produit), ex : “Danone yaourt nature”.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="onSearch()" class="d-flex gap-2 align-items-center">
+      <mat-form-field appearance="outline" class="flex-grow-1">
+        <mat-label>Nom du produit</mat-label>
+        <input matInput formControlName="query" placeholder="Ex : Kellogg’s Corn Flakes" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isLoading">
+        Rechercher
+      </button>
+    </form>
+
+    @if (isLoading) {
+      <div class="mt-3">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <div class="text-muted small mt-2">Recherche en cours…</div>
+      </div>
+    }
+
+    <!-- Aucun résultat -->
+    @if (!isLoading && results.length === 0 && hasSearched) {
+      <div class="text-muted mt-3">
+        Aucun résultat. Essaie un nom plus précis.
+      </div>
+    }
+
+    <!-- Résultats (même idée que Q7 : grid de cards) -->
+    @if (!isLoading && results.length > 0) {
+      <div class="container-fluid px-0 mt-3">
+        <div class="row g-2 mt-2">
+          @for (p of results; track p.code) {
+            <div class="col-12 col-md-6 col-xl-4">
+              <mat-card class="h-60">
+                <mat-card-content class="d-flex align-items-center justify-content-between gap-2">
+                  <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <img
+                      [src]="p.image_url"
+                      alt=""
+                      class="rounded flex-shrink-0"
+                      style="width:48px;height:60px;object-fit:cover;"
+                    />
+                    <div class="overflow-hidden">
+                      <div class="fw-semibold text-truncate">
+                        {{ p.product_name || 'Nom inconnu' }}
+                      </div>
+                      <div class="text-muted small text-truncate">
+                        {{ p.brand ? p.brand : 'Marque inconnue' }}
+                      </div>
+                      <div class="text-muted small">
+                        Nutri-score : {{ (p.nutrition_grades || 'N/A') | uppercase }}
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>
