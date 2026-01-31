@@ -1,11 +1,147 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProfileService } from '../../core/storage/services/profile.service';
+import { AuthService } from '../../core/storage/services/auth.service';
+import { Allergy, DietType, NutritionGoal, PhysicalActivity, User } from '../../core/storage/models/user.model';
+import { firstValueFrom } from 'rxjs';
+import { ChangePasswordPayload, ConfirmCurrentPasswordDialog } from './confirmDialog/confirm-current-password.dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+type ProfileForm = {
+  lastName: FormControl<string>;
+  firstName: FormControl<string>;
+  email: FormControl<string>;
+  nutritionGoal: FormControl<NutritionGoal | null>;
+  diet: FormControl<DietType | null>;
+  physicalActivity: FormControl<PhysicalActivity | null>;
+  allergies: FormControl<Allergy[]>;
+};
 
 @Component({
   selector: 'app-profil',
-  imports: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDividerModule,
+    MatDialogModule
+  ],
   templateUrl: './profil.html',
-  styleUrl: './profil.scss',
+  styleUrls: ['./profil.scss'],
 })
 export class Profil {
+  public user: User | null = null;
+  public editMode = false;
+
+  public nutritionGoals: NutritionGoal[] = ['PERTE_POIDS', 'PRISE_MASSE', 'MAINTIEN', 'SANTE'];
+  public diets: DietType[] = ['OMNIVORE', 'VEGETARIEN', 'VEGAN', 'PESCETARIEN', 'SANS_PORC', 'SANS_GLUTEN'];
+  public activities: PhysicalActivity[] = ['FAIBLE', 'MODEREE', 'ELEVEE'];
+  public allergiesList: Allergy[] = ['GLUTEN', 'LACTOSE', 'ARACHIDE', 'FRUITS_COQUE', 'OEUF', 'SOJA', 'POISSON', 'CRUSTACES'];
+
+  public form = new FormGroup<ProfileForm>({
+    lastName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl({ value: '', disabled: true } as any, { nonNullable: true }),
+    nutritionGoal: new FormControl<NutritionGoal | null>(null),
+    diet: new FormControl<DietType | null>(null),
+    physicalActivity: new FormControl<PhysicalActivity | null>(null),
+    allergies: new FormControl<Allergy[]>([], { nonNullable: true }),
+  });
+
+  constructor(private profile: ProfileService, private auth: AuthService, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) { }
+
+  ngOnInit(): void {
+    const u = this.profile.getConnectedUser();
+    if (!u) {
+      this.router.navigateByUrl('/login');
+      return;
+    }
+    this.user = u;
+    this.patchForm(u);
+    this.form.disable();
+    console.log(this.user);
+  }
+
+  private patchForm(u: User): void {
+    this.form.patchValue({
+      lastName: u.lastName,
+      firstName: u.firstName,
+      email: u.email,
+      nutritionGoal: u.nutritionGoal ?? null,
+      diet: u.diet ?? null,
+      physicalActivity: u.physicalActivity ?? null,
+      allergies: u.allergies ?? [],
+    });
+  }
+
+  public isEmpty(v: unknown): boolean {
+    if (Array.isArray(v)) return v.length === 0;
+    return v === null || v === undefined || String(v).trim().length === 0;
+  }
+
+  public startEdit(): void {
+    this.editMode = true;
+    this.form.enable();
+    this.form.controls.email.disable();
+  }
+
+  public cancelEdit(): void {
+    this.editMode = false;
+    if (this.user) this.patchForm(this.user);
+    this.form.disable();
+  }
+
+  public save(): void {
+    if (!this.user) return;
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const updated = this.profile.updateConnectedUser({
+      lastName: this.form.controls.lastName.value.trim(),
+      firstName: this.form.controls.firstName.value.trim(),
+      nutritionGoal: this.form.controls.nutritionGoal.value,
+      diet: this.form.controls.diet.value,
+      physicalActivity: this.form.controls.physicalActivity.value,
+      allergies: this.form.controls.allergies.value,
+    });
+
+    this.user = updated;
+    this.editMode = false;
+    this.form.disable();
+  }
+
+  public async openChangePasswordDialog(): Promise<void> {
+    const dialogRef = this.dialog.open(ConfirmCurrentPasswordDialog);
+
+    const payload = await firstValueFrom(dialogRef.afterClosed()) as ChangePasswordPayload | null;
+    if (!payload) return; // annulé
+
+    try {
+      await this.auth.changePassword(payload.currentPassword, payload.newPassword);
+      this.snackBar.open('Mot de passe modifié', 'OK', { duration: 2500 });
+    } catch (e: any) {
+      const msg = e instanceof Error ? e.message : '';
+      alert(msg.includes('INVALID_CREDENTIALS') ? 'Mot de passe actuel incorrect.' : 'Impossible de changer le mot de passe.');
+    }
+  }
 
 }

@@ -1,1 +1,106 @@
-<p>creation-compte works!</p>
+<div class="page">
+  <mat-card class="register-card">
+    <mat-card-header class="header">
+      <mat-card-title>Créez votre Compte</mat-card-title>
+      <mat-card-subtitle>Veuillez renseignez les champs pour créer votre compte</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+        <div class="row-2">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Nom</mat-label>
+            <input matInput placeholder="Dupont" formControlName="lastName" autocomplete="family-name" />
+            @if (form.controls['lastName'].touched && form.controls['lastName'].hasError('required')) {
+              <mat-error>Le nom est obligatoire.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Prénom</mat-label>
+            <input matInput placeholder="Jean" formControlName="firstName" autocomplete="given-name" />
+            @if (form.controls['firstName'].touched && form.controls['firstName'].hasError('required')) {
+              <mat-error>Le prénom est obligatoire.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="example@example.com" formControlName="email" autocomplete="email" />
+
+          @if (form.controls['email'].touched && form.controls['email'].hasError('required')) {
+            <mat-error>L’email est obligatoire.</mat-error>
+          } @else if (form.controls['email'].touched && form.controls['email'].hasError('email')) {
+            <mat-error>Format d’email invalide.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Mot de passe</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            autocomplete="new-password"
+          /> <!-- hidePassword est un booléen lié au bouton "oeil" qui permet de basculer entre afficher/masquer le mot de passe
+                  autocomplete indique au navigateur que le mot de passe est nouveau -->
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Afficher/masquer le mot de passe'"
+          > <!-- attr.aria-label décrit le bouton pour les lecteurs d'écran -->
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <!-- à chaque clique, l'icône "oeil" est barré ou ouvert-->
+          </button>
+
+          @if (form.controls['password'].touched && form.controls['password'].hasError('required')) {
+            <mat-error>Le mot de passe est obligatoire.</mat-error>
+          } @else if (form.controls['password'].touched && form.controls['password'].hasError('minlength')) {
+            <mat-error>Minimum 6 caractères.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Confirmer votre mot de passe</mat-label>
+          <input
+            matInput
+            [type]="hideConfirm ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hideConfirm = !hideConfirm"
+            [attr.aria-label]="'Afficher/masquer la confirmation'"
+          >
+            <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+
+          @if (form.touched && form.hasError('passwordsMismatch')) {
+            <mat-error>Les mots de passe ne correspondent pas.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (serverError) {
+          <div class="server-error">{{ serverError }}</div>
+        }
+
+        <button class="submit" type="submit" [disabled]="!form.valid">
+          S'inscrire
+        </button>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="footer">
+          <span>Déjà un compte ?</span>
+          <a routerLink="/login">Se connecter</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
