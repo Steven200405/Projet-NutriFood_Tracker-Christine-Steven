@@ -1,1 +1,104 @@
-<p>recherche works!</p>
+<mat-card class="p-3">
+  <mat-card-header class="mb-2">
+    <h1>Rechercher un aliment</h1>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p class="text-muted mb-3">
+      Astuce : écris le nom du produit de manière le plus précis possible (marque + produit), ex : “Danone yaourt
+      nature”.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="onSearch()" class="d-flex flex gap-2 align-items-center">
+      <input type="text" class="form-control search-input" formControlName="query"
+        placeholder="Nom du produit (ex : Danone yaourt nature)" />
+      <!-- Avec Angular Material, le CSS ne correspond à mes attentes -->
+      <button type="submit" class="button-link" [disabled]="form.invalid || isLoading">
+        Rechercher
+      </button>
+    </form>
+
+    @if (isLoading) {
+    <div class="mt-3">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <div class="text-muted small mt-2">Recherche en cours…</div>
+    </div>
+    }
+
+    @if (!isLoading && results.length === 0 && hasSearched) {
+    <div class="text-muted mt-3">
+      Aucun résultat. Essaie un nom plus précis.
+    </div>
+    }
+
+    @if (selectedProduct === null) {
+    @if (!isLoading && results.length > 0) {
+    <div class="container-fluid px-0 mt-3">
+      <div class="row g-2 mt-2">
+        @for (p of results; track p.code) {
+        <div class="col-12 col-md-6 col-xl-4">
+          <mat-card (click)="openDetail(p)" class="container_pointer">
+            <mat-card-content class="d-flex align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2 overflow-hidden">
+                <img [src]="p.image_url" alt="" class="rounded flex-shrink-0 product-thumb" />
+                <div class="overflow-hidden">
+                  <div class="fw-semibold text-truncate">
+                    {{ p.product_name || 'Nom inconnu' }}
+                  </div>
+                  <div class="text-muted small text-truncate">
+                    {{ p.brand ? p.brand : 'Marque inconnue' }}
+                  </div>
+                  <div class="text-muted small">
+                    Nutri-score : {{ (p.nutrition_grades || 'N/A') | uppercase }}
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        }
+      </div>
+    </div>
+    }
+    }@else {
+    <div class="mt-3 d-flex justify-content-center">
+      <mat-card class="mt-3 p-3 w-100 product_container">
+        <mat-card-header class="product-header">
+          <mat-card-title class="fw-semibold">
+            {{ selectedProduct.product_name || 'Nom inconnu' }}
+          </mat-card-title>
+          <mat-card-subtitle class="text-muted">
+            {{ selectedProduct.brand || 'Marque inconnue' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="d-flex gap-4 align-items-center justify-content-center mt-3 flex-column flex-md-row text-center text-md-start" >
+          <img [src]="selectedProduct.image_url || 'assets/images/no-image.png'" alt=""
+            class="rounded product-thumb-lg flex-shrink-0" />
+
+          <div class="text-block">
+            <div class="mb-3 fs-5">
+              <span class="fw-semibold">Nutri-score :</span>
+              <span class="badge ms-2 fs-6 px-3 py-2" [ngClass]="nutriClass(selectedProduct.nutrition_grades)">
+                {{ (selectedProduct.nutrition_grades || 'N/A') | uppercase }}
+              </span>
+            </div>
+
+            <div class="mb-2">
+              <span class="fw-semibold">Code-barres :</span>
+              {{ selectedProduct.code || 'N/A' }}
+            </div>
+
+            <div class="mb-2">
+              <span class="fw-semibold">Allergènes :</span>
+              {{ selectedProduct.allergens || 'Aucun allergène connu' }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <button type="button" class= "button-link" (click)="closeDetail()">
+      Retour aux résultats
+    </button>
+    }
+  </mat-card-content>
+</mat-card>
