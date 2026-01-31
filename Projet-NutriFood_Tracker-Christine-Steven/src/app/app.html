@@ -4,10 +4,10 @@
     </app-header>
 </div>
 
-<div class = "container-fluid px-0 flex-grow-1 d-flex">
+<div class="container-fluid px-0 flex-grow-1 d-flex">
     <mat-sidenav-container class="flex-grow-1">
 
-        <mat-sidenav #sidenav mode="side" class="border-end sidenav"> 
+        <mat-sidenav #sidenav mode="side" class="border-end sidenav">
             <mat-nav-list class="pt-3">
                 <a mat-list-item routerLink="accueil" (click)="sidenav.close()">
                     <mat-icon class="me-2">home</mat-icon>
@@ -19,6 +19,11 @@
                     Questionnaire
                 </a>
 
+                <a mat-list-item routerLink="recherche" (click)="sidenav.close()">
+                    <mat-icon class="me-2">search</mat-icon>
+                    Recherche
+                </a>
+                
                 <a mat-list-item routerLink="resultat" (click)="sidenav.close()">
                     <mat-icon class="me-2">description</mat-icon>
                     Résultats

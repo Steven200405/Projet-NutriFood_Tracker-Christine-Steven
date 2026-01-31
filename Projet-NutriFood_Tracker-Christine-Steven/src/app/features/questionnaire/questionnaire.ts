@@ -127,7 +127,7 @@ export class Questionnaire {
       return;
     }
 
-    this.oof.searchProducts(category.off_tags, 20).subscribe({
+    this.oof.searchProductsWithCategories(category.off_tags, 20).subscribe({
       next: (products) => {
         const uniq = new Map<string, Produit>();
         for (const p of products) {

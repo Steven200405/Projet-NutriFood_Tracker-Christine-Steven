@@ -8,11 +8,12 @@ import { OpenFoodFactSearchResponse } from '../models/open-food-fact-search-resp
   providedIn: 'root'
 })
 export class ServiceOpenFoodFact {
-  private apiUrl = 'https://world.openfoodfacts.org/api/v2/search';
+  private apiUrlv2 = 'https://world.openfoodfacts.org/api/v2/search';
+  private apiUrlv1 = 'https://world.openfoodfacts.org/cgi/search.pl'; // Plus optimisé pour une recherche libre 
 
   constructor(private http: HttpClient) { }
 
-  searchProducts(categoryTags: string[], pageSize: number = 20): Observable<Produit[]> {
+  searchProductsWithCategories(categoryTags: string[], pageSize: number = 20): Observable<Produit[]> {
 
     let params = new HttpParams()
       .set('page_size', String(pageSize))
@@ -20,13 +21,32 @@ export class ServiceOpenFoodFact {
       .set('sort_by', 'popularity_key');
 
     for (const t of categoryTags) {
-      params = params.append('categories_tags', t); 
+      params = params.append('categories_tags', t);
     }
     params = params.append('countries_tags', 'en:france'); // Limiter que les produits français
 
-    return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrl}`, { params })
+    return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrlv2}`, { params })
       .pipe(map(res => res.products.map(p => this.mapToProduit(p))));
   }
+
+  searchProducts(query: string, pageSize: number = 20): Observable<Produit[]> {
+
+    let params = new HttpParams()
+      .set('search_simple', '1')
+      .set('action', 'process')
+      .set('json', '1')
+      .set('page_size', String(pageSize))
+      .set('fields', 'code,product_name,brands,image_url,nutrition_grades,allergens')
+      .set('sort_by', 'unique_scans_n')
+      .set('search_terms', query);
+
+    params = params.append('countries_tags', 'en:france');
+
+
+    return this.http.get<OpenFoodFactSearchResponse>(`${this.apiUrlv1}`, { params })
+      .pipe(map(res => res.products.map(p => this.mapToProduit(p))));
+  }
+
 
   private mapToProduit(p: any): Produit {
     return {
