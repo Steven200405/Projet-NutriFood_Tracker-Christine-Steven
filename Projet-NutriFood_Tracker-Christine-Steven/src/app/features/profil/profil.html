@@ -1,1 +1,133 @@
-<p>profil works!</p>
+@if (user) {
+<mat-card class="card">
+    <h2 class="title">Profil</h2>
+
+    <form [formGroup]="form" class="grid">
+        <div class="box col2"> <strong>Nom</strong>
+            @if (!editMode) {
+            <div>{{ user.lastName }}</div>
+            } @else {
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="{{ user.lastName }}" formControlName="lastName" />
+            </mat-form-field>
+            }
+        </div>
+
+        <div class="box col2"> <strong>Prénom</strong>
+            @if (!editMode) {
+            <div>{{ user.firstName }}</div>
+            } @else {
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="{{ user.firstName }}" formControlName="firstName" />
+            </mat-form-field>
+            }
+        </div>
+
+        <div class="box col2">
+            <strong>Objectif nutritionnel</strong>
+            @if (!editMode) {
+            @if (isEmpty(user.nutritionGoal)) {
+            <span class="warn"><mat-icon>warning</mat-icon> A compléter</span>
+            } @else {
+            <div>{{ user.nutritionGoal }}</div>
+            }
+            } @else {
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="nutritionGoal">
+                    <mat-option [value]="null">—</mat-option>
+                    @for (g of nutritionGoals; track g) {
+                    <mat-option [value]="g">{{ g }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            }
+        </div>
+
+        <div class="box col4">
+            <strong>Email</strong>
+            <div class="readonly">{{ user.email }}</div>
+        </div>
+
+        <div class="box col2">
+            <strong>Régime</strong>
+            @if (!editMode) {
+            @if (isEmpty(user.diet)) {
+            <span class="warn"><mat-icon>warning</mat-icon> A compléter</span>
+            } @else {
+            <div>{{ user.diet }}</div>
+            }
+            } @else {
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="diet">
+                    <mat-option [value]="null">—</mat-option>
+                    @for (d of diets; track d) {
+                    <mat-option [value]="d">{{ d }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            }
+        </div>
+
+        <div class="box col4">
+            <div class="password-header">
+                <strong>Mot de passe</strong>
+
+                @if (editMode) {
+                <button type="button" mat-raised-button class="btn-green btn-password" (click)="openChangePasswordDialog()">
+                    Modifier
+                </button>
+                }
+            </div>
+
+            @if (!editMode) {
+            <div class="stars">********</div>
+            }
+        </div>
+
+
+        <div class="box col2">
+            <strong>Activité physique</strong>
+            @if (!editMode) {
+            @if (isEmpty(user.physicalActivity)) {
+            <span class="warn"><mat-icon>warning</mat-icon> A compléter</span>
+            } @else {
+            <div>{{ user.physicalActivity }}</div>
+            }
+            } @else {
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="physicalActivity">
+                    <mat-option [value]="null">—</mat-option>
+                    @for (a of activities; track a) {
+                    <mat-option [value]="a">{{ a }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            }
+        </div>
+
+        <div class="box colFull">
+            <strong>Allergies</strong>
+            @if (!editMode) {
+            <div>{{ user.allergies.join(', ') }}</div>
+            } @else {
+            <mat-form-field appearance="outline">
+                <mat-select multiple formControlName="allergies">
+                    @for (al of allergiesList; track al) {
+                    <mat-option [value]="al">{{ al }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            }
+        </div>
+    </form>
+
+    <div class="actions">
+        @if (!editMode) {
+        <button mat-raised-button class="btn-green" (click)="startEdit()">Modifier</button>
+        } @else {
+        <button mat-raised-button class="btn-green" (click)="save()">Enregistrer</button>
+        <button mat-button (click)="cancelEdit()">Annuler</button>
+        }
+    </div>
+</mat-card>
+}

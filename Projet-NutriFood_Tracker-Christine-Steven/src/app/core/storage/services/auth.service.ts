@@ -9,7 +9,7 @@ function uid(): string {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private db: LocalDbService) {}
+  constructor(private db: LocalDbService) { }
 
   getSession() {
     return this.db.getSession();
@@ -19,7 +19,7 @@ export class AuthService {
     this.db.clearSession();
   }
 
-  async register(email: string, password: string) {
+  async register(email: string, password: string, lastName: string, firstName: string): Promise<User> {
     const users = this.db.getUsers();
 
     const normalizedEmail = email.trim().toLowerCase();
@@ -31,8 +31,8 @@ export class AuthService {
 
     const user: User = {
       id: uid(),
-      firstName: '',
-      lastName: '',
+      firstName: firstName,
+      lastName: lastName,
       email: normalizedEmail,
       passwordHash,
       nutritionGoal: null,
@@ -45,8 +45,6 @@ export class AuthService {
 
     users.push(user);
     this.db.saveUsers(users);
-
-    this.db.setSession({ userId: user.id, email: user.email, loggedAt: now });
     return user;
   }
 
@@ -62,6 +60,27 @@ export class AuthService {
 
     this.db.setSession({ userId: user.id, email: user.email, loggedAt: new Date().toISOString() });
     return true;
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const session = this.db.getSession();
+    if (!session) throw new Error('NOT_LOGGED_IN');
+
+    const users = this.db.getUsers();
+    const idx = users.findIndex(u => u.id === session.userId);
+    if (idx === -1) throw new Error('USER_NOT_FOUND');
+
+    const currentHash = await sha256(currentPassword);
+    if (currentHash !== users[idx].passwordHash) throw new Error('INVALID_CREDENTIALS');
+
+    const newHash = await sha256(newPassword);
+    users[idx] = {
+      ...users[idx],
+      passwordHash: newHash,
+      updatedAt: new Date().toISOString()
+    };
+
+    this.db.saveUsers(users);
   }
 
   /* Récupère l'utilisateur complet du user connecté ? diff avec db.getSession()*/
