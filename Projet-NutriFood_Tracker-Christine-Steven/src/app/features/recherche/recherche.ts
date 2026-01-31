@@ -9,24 +9,26 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { UpperCasePipe } from '@angular/common';
+import { NgClass, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-recherche',
-  imports: [MatCardModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatProgressBarModule, MatListModule, MatIconModule, MatFormFieldModule,MatButtonModule, UpperCasePipe],
+  imports: [MatCardModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatProgressBarModule, MatListModule, MatIconModule, MatFormFieldModule, MatButtonModule, UpperCasePipe, NgClass],
   templateUrl: './recherche.html',
   styleUrl: './recherche.scss',
 })
 export class Recherche {
-form = new FormGroup({
+  form = new FormGroup({
     query: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2)] }),
   });
 
-  results: Produit[] = [];
-  isLoading: boolean = false;
-  hasSearched: boolean = false;
+  public results: Produit[] = [];
+  public isLoading: boolean = false;
+  public hasSearched: boolean = false;
+  public selectedProduct: Produit | null = null;
 
-  constructor(private oof: ServiceOpenFoodFact) {}
+
+  constructor(private oof: ServiceOpenFoodFact) { }
 
   onSearch(): void {
     if (this.form.invalid) {
@@ -51,4 +53,25 @@ form = new FormGroup({
       }
     });
   }
+
+  public openDetail(p: Produit): void {
+    this.selectedProduct = p;
+  }
+
+  public closeDetail(): void {
+    this.selectedProduct = null;
+  }
+
+  public nutriClass(grade?: string): string {
+  const g = (grade ?? '').toLowerCase();
+  switch (g) {
+    case 'a': return 'nutri-a';
+    case 'b': return 'nutri-b';
+    case 'c': return 'nutri-c';
+    case 'd': return 'nutri-d';
+    case 'e': return 'nutri-e';
+    default: return 'nutri-na';
+  }
+}
+
 }
