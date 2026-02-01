@@ -29,7 +29,6 @@ type ProfileForm = {
 
 @Component({
   selector: 'app-profil',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -43,7 +42,7 @@ type ProfileForm = {
     MatDialogModule
   ],
   templateUrl: './profil.html',
-  styleUrls: ['./profil.scss'],
+  styleUrl: './profil.scss',
 })
 export class Profil {
   public user: User | null = null;
@@ -67,7 +66,7 @@ export class Profil {
   constructor(private profile: ProfileService, private auth: AuthService, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    const u = this.profile.getConnectedUser();
+    const u = this.auth.getCurrentUser();
     if (!u) {
       this.router.navigateByUrl('/login');
       return;

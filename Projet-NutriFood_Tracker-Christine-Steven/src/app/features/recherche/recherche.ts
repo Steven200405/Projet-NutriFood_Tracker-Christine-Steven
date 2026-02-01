@@ -13,7 +13,7 @@ import { NgClass, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-recherche',
-  imports: [MatCardModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatProgressBarModule, MatListModule, MatIconModule, MatFormFieldModule, MatButtonModule, UpperCasePipe, NgClass],
+  imports: [MatCardModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatProgressBarModule, MatListModule, MatIconModule, MatFormFieldModule, UpperCasePipe, NgClass],
   templateUrl: './recherche.html',
   styleUrl: './recherche.scss',
 })
@@ -30,7 +30,7 @@ export class Recherche {
 
   constructor(private oof: ServiceOpenFoodFact) { }
 
-  onSearch(): void {
+  public onSearch(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -45,8 +45,10 @@ export class Recherche {
       next: (products) => {
         const uniq = new Map<string, Produit>();
         for (const p of products) {
-          const key = p.code || p.product_name || Math.random().toString();
-          uniq.set(key, p);
+          const key = p.code || '';
+          if (key) {
+            uniq.set(key, p);
+          }
         }
         this.results = Array.from(uniq.values());
         this.isLoading = false;
@@ -63,15 +65,18 @@ export class Recherche {
   }
 
   public nutriClass(grade?: string): string {
-  const g = (grade ?? '').toLowerCase();
-  switch (g) {
-    case 'a': return 'nutri-a';
-    case 'b': return 'nutri-b';
-    case 'c': return 'nutri-c';
-    case 'd': return 'nutri-d';
-    case 'e': return 'nutri-e';
-    default: return 'nutri-na';
+    const g = (grade ?? '').toLowerCase();
+    switch (g) {
+      case 'a': return 'nutri-a';
+      case 'b': return 'nutri-b';
+      case 'c': return 'nutri-c';
+      case 'd': return 'nutri-d';
+      case 'e': return 'nutri-e';
+      default: return 'nutri-na';
+    }
   }
-}
+  public allergensText(allergens?: string[]): string {
+    return allergens && allergens.length > 0 ? allergens.join(', ') : 'Aucun allergène connu';
+  }
 
 }

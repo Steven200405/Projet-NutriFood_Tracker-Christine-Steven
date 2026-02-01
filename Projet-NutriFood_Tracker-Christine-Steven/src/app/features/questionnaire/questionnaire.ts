@@ -15,6 +15,10 @@ import { Question } from '../../models/question';
 import { CATEGORIES } from './data/categories';
 import { ServiceScoring } from '../../services/service-scoring';
 import { minArrayLengthValidator } from '../../validators/min-array-length';
+import { QuestionnaireService } from '../../core/storage/services/questionnaire.service';
+import { AuthService } from '../../core/storage/services/auth.service';
+import { Router } from '@angular/router';
+import { User } from '../../core/storage/models/user.model';
 
 
 @Component({
@@ -39,11 +43,28 @@ export class Questionnaire {
   });
 
   public indexQuestionnaire: number = 0;
-
-  public resultsSearch: Produit[] = [];
   public questions: Question[] = QUESTIONS;
 
-  constructor(private oof: ServiceOpenFoodFact, private serviceScoring: ServiceScoring) { }
+  public activeCategoryName: string = ''; // Sélectionne de la catégorie active pour afficher les produits
+  public isLoadingQ7 = false;
+
+  public searchResults: Produit[] = []; // La liste des produits récupérés pour la catégorie active
+  public selectedProductsByCategory: Record<string, Produit[]> = {}; // Pour chaque catégorie, la liste des produits sélectionnés
+
+  public user: User | null = null;
+
+  constructor(private oof: ServiceOpenFoodFact, private serviceScoring: ServiceScoring, private questionnaireService: QuestionnaireService, private authService: AuthService, private router: Router
+  ) {
+  }
+
+  ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      this.router.navigateByUrl('/login');
+    }
+    this.user = user;
+  }
+
 
   public getControl(id: string): FormControl {
     return this.formQuestions.get(id) as FormControl;
@@ -100,13 +121,6 @@ export class Questionnaire {
       this.indexQuestionnaire--;
     }
   }
-
-  //Méthodes pour Q7
-  public activeCategoryName: string = ''; // Sélectionne de la catégorie active pour afficher les produits
-  public isLoadingQ7 = false;
-
-  public searchResults: Produit[] = []; // La liste des produits récupérés pour la catégorie active
-  public selectedProductsByCategory: Record<string, Produit[]> = {}; // Pour chaque catégorie, la liste des produits sélectionnés
 
   public setActiveCategory(name: string): void {
     if (!this.formQuestions.controls.q6.value.includes(name)) return;
@@ -177,14 +191,16 @@ export class Questionnaire {
 
 
   public submit(): void {
-    if(this.formQuestions.invalid) {
+    if (this.formQuestions.invalid) {
       this.formQuestions.markAllAsTouched();
       return;
     }
-    alert("Le formulaire est valide");
-    alert(`Résultats :
-      - Score global (habitudes) : ${this.serviceScoring.getGlobalScore(this.formQuestions)}
-      - Nutri-score moyen des produits consommés : ${this.serviceScoring.getAverageFoodScore(this.formQuestions.controls.q7.value)}`);
+    this.questionnaireService.saveResult(
+      this.serviceScoring.getGlobalScore(this.formQuestions),
+      this.serviceScoring.getAverageFoodScore(this.formQuestions.controls.q7.value),
+    );
+
+    this.router.navigate(['/resultat']);
   }
 
 

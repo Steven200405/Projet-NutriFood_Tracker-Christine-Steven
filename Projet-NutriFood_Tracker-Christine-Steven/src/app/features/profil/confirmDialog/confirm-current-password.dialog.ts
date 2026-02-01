@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {ServicePassword} from '../../../services/service-password';
 import { ProfileService } from '../../../core/storage/services/profile.service';
 import { sha256 } from '../../../core/storage/utils/crypto.util';
+import { AuthService } from '../../../core/storage/services/auth.service';
 export type ChangePasswordPayload = {
   currentPassword: string;
   newPassword: string;
@@ -23,13 +24,13 @@ export class ConfirmCurrentPasswordDialog {
     currentPassword: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     newPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(72)]),
   });
-  constructor(private profile: ProfileService, private passwordService: ServicePassword) {}
+  constructor(private auth: AuthService, private passwordService: ServicePassword) {}
 
   async onSubmit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    await this.passwordService.passwordMatchValidator(await sha256(this.form.value.currentPassword), this.profile.getConnectedUser()?.passwordHash);
+    await this.passwordService.passwordMatchValidator(await sha256(this.form.value.currentPassword), this.auth.getCurrentUser()?.passwordHash);
   }
 }

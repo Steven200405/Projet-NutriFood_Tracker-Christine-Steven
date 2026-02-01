@@ -7,7 +7,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { Sidebar } from "./shared/sidebar/sidebar";
 
 @Component({
   selector: 'app-root',
@@ -19,7 +18,7 @@ import { Sidebar } from "./shared/sidebar/sidebar";
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatListModule, Sidebar],
+    MatListModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

@@ -1,1 +1,132 @@
-<p>resultat works!</p>
+<mat-card class="p-3">
+    <h1 class="mb-2">
+        <span>Résultat du dernier questionnaire effectué</span>
+    </h1>
+
+    <mat-card-content class="mt-3">
+        @if (currentQuestionnary) {
+        <div class="row g-3">
+
+            <div class="col-12 col-md-4">
+                <div class="p-3 border rounded h-100">
+                    <div class="fw-semibold mb-2">Date</div>
+
+                    <div class=" d-flex justify-content-center">
+                        <div class="badge ms-2 fs-2 px-3 py-2 score">
+                            <div>{{ formatDate(currentQuestionnary.createdAt) }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="p-3 border rounded h-100">
+                    <div class="fw-semibold mb-2">Score global</div>
+
+                    <div class=" d-flex justify-content-center">
+                        <div class="badge ms-2 fs-1 px-3 py-2 score">
+                            {{ currentQuestionnary.globalScore }}
+                        </div>
+                    </div>
+                    <div class="text-muted small text-center mt-2">
+                        Score calculé en fonction de vos réponses au questions globales
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="p-3 border rounded h-100">
+                    <div class="fw-semibold mb-2">Nutri-score moyen</div>
+
+                    <div class="d-flex justify-content-center">
+                        <span class=" badge ms-2 fs-1 px-3 py-2"
+                            [ngClass]="nutriClass(currentQuestionnary.averageNutriScore)">
+                            {{ currentQuestionnary.averageNutriScore }}
+                        </span>
+                    </div>
+
+                    <div class="text-muted small text-center mt-2">
+                        Moyenne calculée sur vos produits sélectionnés dans le questionnaire
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        } @else {
+        <div class="alert alert-warning mb-0">
+            Aucun résultat enregistré pour l’instant. Fais le questionnaire une première fois.
+        </div>
+        }
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="mt-3">
+  <h1 class="px-3 pt-3">Historique</h1>
+
+  <mat-card-content class="mt-2">
+    @if (historyQuestionnary.length === 0) {
+      <div class="text-muted px-3 pb-3">Pas d’historique pour le moment.</div>
+    } @else {
+
+      <div class="d-flex flex-column gap-3 px-2 pb-3">
+
+        @for (e of historyQuestionnary; track e.createdAt) {
+          <div class="border rounded p-3">
+
+            <div class="row g-3 align-items-stretch">
+
+              <div class="col-12 col-md-4">
+                <div class="h-100">
+                  <div class="fw-semibold mb-2">Date</div>
+
+                  <div class="d-flex justify-content-center">
+                    <div class="badge fs-6 px-3 py-2 score">
+                      {{ formatDate(e.createdAt) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="h-100">
+                  <div class="fw-semibold mb-2">Score global</div>
+
+                  <div class="d-flex justify-content-center">
+                    <div class="badge fs-3 px-3 py-2 score">
+                      {{ e.globalScore }}
+                    </div>
+                  </div>
+
+                  <div class="text-muted small text-center mt-2">
+                    Score basé sur vos réponses globales
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="h-100">
+                  <div class="fw-semibold mb-2">Nutri-score moyen</div>
+
+                  <div class="d-flex justify-content-center">
+                    <span class="badge fs-3 px-3 py-2"
+                          [ngClass]="nutriClass(e.averageNutriScore)">
+                      {{ e.averageNutriScore }}
+                    </span>
+                  </div>
+
+                  <div class="text-muted small text-center mt-2">
+                    Moyenne basée sur les produits sélectionnés
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        }
+
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

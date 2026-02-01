@@ -33,7 +33,7 @@ export class Header {
 
   constructor( private auth: AuthService, private router: Router, private snackBar: MatSnackBar) { }
 
-  onMenuClick() {
+  public onMenuClick(): void {
     this.menu.emit();
   }
 
@@ -41,15 +41,15 @@ export class Header {
     return this.auth.getSession() !== null;
   }
 
-  goLogin(): void {
+  public goLogin(): void {
     this.router.navigateByUrl('/login');
   }
 
-  goProfile(): void {
+  public goProfile(): void {
     this.router.navigateByUrl('/profil');
   }
 
-  logout(): void {
+  public logout(): void {
     this.auth.logout();
     this.router.navigateByUrl('/accueil');
     this.snackBar.open('Déconnecté avec succès !', 'OK', {duration: 3000});

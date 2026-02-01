@@ -15,7 +15,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -31,7 +30,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatSnackBarModule
   ],
   templateUrl: './creation-compte.html',
-  styleUrls: ['./creation-compte.scss']
+  styleUrl: './creation-compte.scss'
 })
 export class CreationCompte {
   public hidePassword = true;
