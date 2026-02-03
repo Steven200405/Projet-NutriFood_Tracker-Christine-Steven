@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { confirmPasswordValidator } from '../../validators/confirm-password.validator';
+import { confirmPasswordValidator } from '../../core/storage/validators/confirm-password.validator';
 import { AuthService } from '../../core/storage/services/auth.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 

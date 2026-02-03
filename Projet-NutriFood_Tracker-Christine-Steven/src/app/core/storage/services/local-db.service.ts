@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { QuestionnaireEntry } from '../models/questionnaire.model';
+import { QuestionnaireAnswers } from '../models/questionnaireAnswers';
 import { Session } from '../models/session.model';
 
 type StorageKey = 'nf_users' | 'nf_questionnaires' | 'nf_session';
@@ -20,10 +20,10 @@ export class LocalDbService {
   getUsers(): User[] { return this.read<User[]>('nf_users', []); }
   saveUsers(users: User[]): void { this.write('nf_users', users); }
 
-  getQuestionnaires(): QuestionnaireEntry[] {
-    return this.read<QuestionnaireEntry[]>('nf_questionnaires', []);
+  getQuestionnaires(): QuestionnaireAnswers[] {
+    return this.read<QuestionnaireAnswers[]>('nf_questionnaires', []);
   }
-  saveQuestionnaires(entries: QuestionnaireEntry[]): void {
+  saveQuestionnaires(entries: QuestionnaireAnswers[]): void {
     this.write('nf_questionnaires', entries);
   }
 

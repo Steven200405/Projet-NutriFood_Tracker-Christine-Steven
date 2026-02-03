@@ -17,13 +17,7 @@ export class ServiceScoring {
 
   public getAverageFoodScore(selectedProducts: any[]): string {
     let scoreMoyenAliments = "";
-    const nutriMap: Record<string, number> = {
-      a: 5,
-      b: 4,
-      c: 3,
-      d: 2,
-      e: 1,
-    };
+    const nutriMap: Record<string, number> = {a: 5, b: 4, c: 3, d: 2, e: 1};
     let total = 0;
     let count = 0;
     for (const p of selectedProducts) {
@@ -33,7 +27,6 @@ export class ServiceScoring {
         count++;
       }
     }
-
     if (count === 0) {
       scoreMoyenAliments = 'Non disponible';
     } else {

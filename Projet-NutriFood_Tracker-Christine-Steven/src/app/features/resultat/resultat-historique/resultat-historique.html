@@ -1,0 +1,58 @@
+ <div class="d-flex flex-column gap-3 px-2 pb-3">
+
+        @for (e of historyQuestionnary; track e.createdAt) {
+          <div class="border rounded p-3">
+
+            <div class="row g-3 align-items-stretch">
+
+              <div class="col-12 col-md-4">
+                <div class="h-100">
+                  <div class="fw-semibold mb-2">Date</div>
+
+                  <div class="d-flex justify-content-center">
+                    <div class="badge fs-6 px-3 py-2 score">
+                      {{e.createdAt | date: 'M/d/yy, h:mm a' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="h-100">
+                  <div class="fw-semibold mb-2">Score global</div>
+
+                  <div class="d-flex justify-content-center">
+                    <div class="badge fs-3 px-3 py-2 score">
+                      {{ e.globalScore }}
+                    </div>
+                  </div>
+
+                  <div class="text-muted small text-center mt-2">
+                    Score basé sur vos réponses globales
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="h-100">
+                  <div class="fw-semibold mb-2">Nutri-score moyen</div>
+
+                  <div class="d-flex justify-content-center">
+                    <span class="badge fs-3 px-3 py-2"
+                          [ngClass]="e.averageNutriScore | nutriClassPipe">
+                      {{ e.averageNutriScore }}
+                    </span>
+                  </div>
+
+                  <div class="text-muted small text-center mt-2">
+                    Moyenne basée sur les produits sélectionnés
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        }
+
+      </div>

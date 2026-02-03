@@ -8,14 +8,17 @@ export class AuthService {
 
   constructor(private db: LocalDbService) { }
 
+  //Création d'une session user
   public getSession(): { userId: string; email: string; loggedAt: string } | null {
     return this.db.getSession();
   }
 
+  //Déconnexion
   public logout(): void {
     this.db.clearSession();
   }
 
+  //Création d'un compte user
   public async register(email: string, password: string, lastName: string, firstName: string): Promise<User> {
     const users = this.db.getUsers();
 
@@ -45,6 +48,7 @@ export class AuthService {
     return user;
   }
 
+  //Login
   public async login(email: string, password: string): Promise<boolean> {
     const users = this.db.getUsers();
     const normalizedEmail = email.trim().toLowerCase();
@@ -59,6 +63,7 @@ export class AuthService {
     return true;
   }
 
+  //Changement de mot de passe avec système de vérification entre l'actuel et le nouveau
   public async changePassword(currentPassword: string, newPassword: string): Promise<void> {
     const session = this.db.getSession();
     if (!session) throw new Error('NOT_LOGGED_IN');
@@ -79,13 +84,15 @@ export class AuthService {
 
     this.db.saveUsers(users);
   }
-
+  
+  //Récupérer l'utilisateur connecté
   public getCurrentUser(): User | null {
     const session = this.db.getSession();
     if (!session) return null;
     return this.db.getUsers().find(u => u.id === session.userId) ?? null;
   }
 
+  // Génération d'un uid
   private uid(): string {
   return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 }

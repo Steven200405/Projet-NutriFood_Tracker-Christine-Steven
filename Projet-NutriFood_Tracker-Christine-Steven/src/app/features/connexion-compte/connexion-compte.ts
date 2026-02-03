@@ -52,7 +52,7 @@ export class ConnexionCompte {
 
     try {
       await this.auth.login(this.form.controls['email'].value.trim(), this.form.controls['password'].value);
-      this.router.navigateByUrl('/accueil');
+      this.router.navigate(['accueil']);
       this.snackBar.open('Connecté avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {
       const msg = e instanceof Error ? e.message : '';
