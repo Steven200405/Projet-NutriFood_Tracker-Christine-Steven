@@ -1,0 +1,47 @@
+<div class="row g-3">
+
+    <div class="col-12 col-md-4">
+        <div class="p-3 border rounded h-100">
+            <div class="fw-semibold mb-2">Date</div>
+
+            <div class=" d-flex justify-content-center">
+                <div class="badge ms-2 fs-2 px-3 py-2 score">
+                    <div>{{ currentQuestionnary?.createdAt |date: 'M/d/yy, h:mm a' }}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="p-3 border rounded h-100">
+            <div class="fw-semibold mb-2">Score global</div>
+
+            <div class=" d-flex justify-content-center">
+                <div class="badge ms-2 fs-1 px-3 py-2 score">
+                    {{ currentQuestionnary?.globalScore }}
+                </div>
+            </div>
+            <div class="text-muted small text-center mt-2">
+                Score calculé en fonction de vos réponses au questions globales
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="p-3 border rounded h-100">
+            <div class="fw-semibold mb-2">Nutri-score moyen</div>
+
+            <div class="d-flex justify-content-center">
+                <span class=" badge ms-2 fs-1 px-3 py-2" [ngClass]="currentQuestionnary?.averageNutriScore | nutriClassPipe">
+                    {{ currentQuestionnary?.averageNutriScore }}
+                </span>
+            </div>
+
+            <div class="text-muted small text-center mt-2">
+                Moyenne calculée sur vos produits sélectionnés dans le questionnaire
+            </div>
+        </div>
+    </div>
+
+</div>

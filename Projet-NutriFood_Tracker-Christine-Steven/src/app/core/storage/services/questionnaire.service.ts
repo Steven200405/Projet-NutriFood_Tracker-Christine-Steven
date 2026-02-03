@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { LocalDbService } from './local-db.service';
-import { QuestionnaireEntry } from '../models/questionnaire.model';
+import { QuestionnaireAnswers } from '../models/questionnaireAnswers';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionnaireService {
   constructor(private db: LocalDbService) { }
 
-  public saveResult(globalScore: number, averageNutriScore: string): QuestionnaireEntry {
+  public saveResult(globalScore: number, averageNutriScore: string, selectedProducts: any): QuestionnaireAnswers {
     const session = this.db.getSession();
     if (!session) throw new Error('NOT_LOGGED_IN');
 
     const entries = this.db.getQuestionnaires();
 
-    const entry: QuestionnaireEntry = {
+    const entry: QuestionnaireAnswers = {
       userId: session.userId,
       createdAt: new Date().toISOString(),
       globalScore,
       averageNutriScore,
+      selectedProducts,
     };
 
     entries.push(entry);
@@ -24,7 +25,7 @@ export class QuestionnaireService {
     return entry;
   }
 
-  public getMyHistory(): QuestionnaireEntry[] {
+  public getMyHistory(): QuestionnaireAnswers[] {
     const session = this.db.getSession();
     if (!session) return [];
 
@@ -33,7 +34,7 @@ export class QuestionnaireService {
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
 
-  public getMyLast(): QuestionnaireEntry | null {
+  public getMyLast(): QuestionnaireAnswers | null {
     const h = this.getMyHistory();
     return h.length ? h[0] : null;
   }

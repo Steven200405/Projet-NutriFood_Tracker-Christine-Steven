@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Produit } from '../../models/produit';
-import { ServiceOpenFoodFact } from '../../services/service-open-food-fact';
+import { Produit } from '../../core/storage/models/produit';
+import { ServiceOpenFoodFact } from '../../core/storage/services/service-open-food-fact';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { JsonPipe, NgClass, UpperCasePipe } from '@angular/common';
-import { ServiceForm } from '../../services/service-form';
+import { ServiceForm } from '../../core/storage/services/service-form';
 import { Router } from '@angular/router';
 
 @Component({

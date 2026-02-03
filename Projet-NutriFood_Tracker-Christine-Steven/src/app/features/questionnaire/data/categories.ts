@@ -1,4 +1,4 @@
-import { FoodCategories } from "../../../models/food-categories";
+import { FoodCategories } from "../../../core/storage/models/food-categories";
 
 export const CATEGORIES: FoodCategories[] = [
     { name: 'Fruits et légumes', off_tags: ['en:fruits', 'en:vegetables'] },

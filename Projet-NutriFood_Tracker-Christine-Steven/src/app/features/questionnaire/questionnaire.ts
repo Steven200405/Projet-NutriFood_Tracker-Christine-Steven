@@ -4,28 +4,26 @@ import { FormGroup, ReactiveFormsModule, FormControl, Validators } from '@angula
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { FoodCategories } from '../../models/food-categories';
-import { ServiceOpenFoodFact } from '../../services/service-open-food-fact';
-import { Produit } from '../../models/produit';
+import { FoodCategories } from '../../core/storage/models/food-categories';
+import { ServiceOpenFoodFact } from '../../core/storage/services/service-open-food-fact';
+import { Produit } from '../../core/storage/models/produit';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { QUESTIONS } from './data/questions';
-import { Question } from '../../models/question';
+import { Question } from '../../core/storage/models/question';
 import { CATEGORIES } from './data/categories';
-import { ServiceScoring } from '../../services/service-scoring';
-import { minArrayLengthValidator } from '../../validators/min-array-length';
+import { ServiceScoring } from '../../core/storage/services/service-scoring';
 import { QuestionnaireService } from '../../core/storage/services/questionnaire.service';
 import { AuthService } from '../../core/storage/services/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../core/storage/models/user.model';
-import { ServiceForm } from '../../services/service-form';
-import { JsonPipe } from '@angular/common';
+import { ServiceForm } from '../../core/storage/services/service-form';
 
 
 @Component({
   selector: 'app-questionnaire',
-  imports: [ReactiveFormsModule, JsonPipe, MatCardModule, MatRadioModule, MatButtonModule, MatProgressBarModule, MatCheckboxModule, MatChipsModule, MatIconModule],
+  imports: [ReactiveFormsModule, MatCardModule, MatRadioModule, MatButtonModule, MatProgressBarModule, MatCheckboxModule, MatChipsModule, MatIconModule],
   templateUrl: './questionnaire.html',
   styleUrl: './questionnaire.scss',
 })
@@ -195,6 +193,7 @@ export class Questionnaire implements OnInit{
     this.questionnaireService.saveResult(
       this.serviceScoring.getGlobalScore(this.formQuestions),
       this.serviceScoring.getAverageFoodScore(this.formQuestions.get('q7')?.value),
+      this.formQuestions.get('q7')?.value
     );
 
     this.router.navigate(['resultat']);

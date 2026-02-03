@@ -4,7 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import {ServicePassword} from '../../../services/service-password';
+import {ServicePassword} from '../../../core/storage/services/service-password';
 import { sha256 } from '../../../core/storage/utils/crypto.util';
 import { AuthService } from '../../../core/storage/services/auth.service';
 export type ChangePasswordPayload = {
