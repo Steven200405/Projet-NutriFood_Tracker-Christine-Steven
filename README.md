@@ -29,9 +29,9 @@ API utilisée : Open Food Facts (https://fr.openfoodfacts.org)
 ## Lancement du projet
 
 1. Cloner le projet :
-   ```bash
-   git clone https://github.com/Steven200405/Projet-NutriFood_Tracker-Christine-Steven.git
+  ```bash
+  git clone https://github.com/Steven200405/Projet-NutriFood_Tracker-Christine-Steven.git
 
 2. Lancer le projet:
   ```bash
-   ng serve
+  ng serve
