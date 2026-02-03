@@ -1,14 +1,11 @@
-<mat-card class="container-lg my-4 p-4 shadow-sm rounded-4">
-    <mat-card-title class="fs-4 fw-bold mb-3 d-block">Questionnaire</mat-card-title>
+<mat-card class="container-lg my-4$ p-4 shadow-sm rounded-4">
+    <h1 class="fs-1 fw-bold mb-3">Questionnaire</h1>
 
     <form [formGroup]="formQuestions">
         <h3 class="h5 fw-semibold mb-3">{{ currentQuestion.title }}</h3>
-
-        <!-- Q1 à Q5 -->
-        @if (indexQuestionnaire < 5) {
-        <mat-radio-group
-            [formControl]="getControl(currentQuestion.id)"
-            class="d-block p-3 bg-white border rounded-3">
+        @switch (currentQuestion.type) {
+        @case ("radio") {
+        <mat-radio-group [formControl]="getControl(currentQuestion.id)" class="d-block p-3 bg-white border rounded-3">
             @for (opt of currentQuestion.options; track opt.label) {
             <mat-radio-button [value]="opt.points" class="d-block py-1">
                 {{ opt.label }}
@@ -16,34 +13,23 @@
             }
         </mat-radio-group>
         }
-
-        <!-- Q6-->
-        @if (indexQuestionnaire === 5) {
+        @case ("checkbox") {
         <mat-radio-group [formControl]="getControl(currentQuestion.id)" class="d-block p-3 bg-white border rounded-3">
             @for (opt of currentQuestion.options; track opt.label) {
-            <mat-checkbox
-                [checked]="formQuestions.controls.q6.value.includes(opt.label)"
-                (change)="toggleCategory(opt.label, $event.checked)"
-                class="d-block py-1">
+            <mat-checkbox [checked]="formQuestions.get('q6')?.value.includes(opt.label)"
+                (change)="toggleCategory(opt.label, $event.checked)" class="d-block py-1">
                 {{ opt.label }}
             </mat-checkbox>
             }
         </mat-radio-group>
         }
-
-        <!-- Q7-->
-        @if (indexQuestionnaire === 6) {
+        @case ("search") {
         <mat-card class="p-3 mt-3">
-            <mat-card-header class="mb-2">
-                <mat-card-title class="fw-semibold">Sélectionnez une catégorie</mat-card-title>
-            </mat-card-header>
-
+            <h4 class="fw-semibold">Sélectionnez une catégorie</h4>
             <mat-card-content>
                 <mat-chip-listbox class="d-flex flex-wrap gap-2" aria-label="Catégories">
-                    @for (catName of formQuestions.controls.q6.value; track catName) {
-                    <mat-chip-option
-                        [selected]="activeCategoryName === catName"
-                        (click)="setActiveCategory(catName)">
+                    @for (catName of formQuestions.get('q6')?.value; track catName) {
+                    <mat-chip-option [selected]="activeCategoryName === catName" (click)="setActiveCategory(catName)">
                         {{ catName }}
                     </mat-chip-option>
                     }
@@ -97,7 +83,6 @@
                     </div>
                 </div>
 
-                <!-- Sélections -->
                 <mat-card class="mt-3">
                     <mat-card-header>
                         <mat-card-title class="fw-semibold">Sélections (max 3)</mat-card-title>
@@ -128,30 +113,40 @@
                         </div>
                         }
 
-                        @if (formQuestions.controls.q7.value.length === 0) {
+                        @if (this.formQuestions.get('q7')?.value.length === 0) {
                         <div class="text-danger mt-2">
                             Sélectionnez au moins 1 produit pour valider le questionnaire.
                         </div>
                         }
                     </mat-card-content>
                 </mat-card>
+
+                <div class="alert alert-warning mt-3">
+                    Si vous ne trouvez pas votre aliment, vous pouvez effectuer une recherche d'aliment en cliquant ici:
+                    <button type="button" class="btn btn-outline-primary mt-2" (click)="goToFoodSearch()">
+                        Aliment non trouvé
+                    </button>
+                </div>
                 }
                 }
             </mat-card-content>
         </mat-card>
         }
+        }
 
         @if (formQuestions.get(currentQuestion.id)?.touched &&
         formQuestions.get(currentQuestion.id)?.invalid) {
-        <div class="alert alert-danger mt-3" role="alert">Sélectionnez au moins une catégorie</div>
+        <div class="alert alert-danger mt-3" role="alert">Sélectionnez au moins une option</div>
         }
+        {{formQuestions.value | json}}
 
         <div class="d-flex justify-content-between mt-4">
-            <button  type="button" class = "button-link" (click)="previousQuestion()" [disabled]="indexQuestionnaire === 0">
+            <button type="button" class="button-link" (click)="previousQuestion()"
+                [disabled]="indexQuestionnaire === 0">
                 Précédent
             </button>
 
-            <button  type="button" class= "button-link "
+            <button type="button" class="button-link "
                 (click)="indexQuestionnaire === questions.length - 1 ? submit() : nextQuestion()">
                 {{ indexQuestionnaire === questions.length - 1 ? 'Terminer' : 'Suivant' }}
             </button>

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ServicePassword {
-  passwordMatchValidator(passwordKey = 'password', confirmKey = 'confirmPassword') {
+  passwordMatchValidator(passwordKey = 'password', confirmKey = 'confirmPassword'): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.get(passwordKey)?.value;
       const confirm = control.get(confirmKey)?.value;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,7 +29,6 @@ type ProfileForm = {
 
 @Component({
   selector: 'app-profil',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -43,11 +42,11 @@ type ProfileForm = {
     MatDialogModule
   ],
   templateUrl: './profil.html',
-  styleUrls: ['./profil.scss'],
+  styleUrl: './profil.scss',
 })
-export class Profil {
+export class Profil implements OnInit{
   public user: User | null = null;
-  public editMode = false;
+  public editMode: boolean = false;
 
   public nutritionGoals: NutritionGoal[] = ['PERTE_POIDS', 'PRISE_MASSE', 'MAINTIEN', 'SANTE'];
   public diets: DietType[] = ['OMNIVORE', 'VEGETARIEN', 'VEGAN', 'PESCETARIEN', 'SANS_PORC', 'SANS_GLUTEN'];
@@ -66,10 +65,10 @@ export class Profil {
 
   constructor(private profile: ProfileService, private auth: AuthService, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
-  ngOnInit(): void {
-    const u = this.profile.getConnectedUser();
+  public ngOnInit(): void {
+    const u = this.auth.getCurrentUser();
     if (!u) {
-      this.router.navigateByUrl('/login');
+      this.router.navigate(['login']);
       return;
     }
     this.user = u;

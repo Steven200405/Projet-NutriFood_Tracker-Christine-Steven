@@ -53,7 +53,7 @@ export class ServiceOpenFoodFact {
       code: p.code,
       product_name: p.product_name ?? '(Sans nom)',
       brand: p.brands ?? '(Sans marque)',
-      image_url: p.image_url ?? 'assets/images/no-image.png',
+      image_url: p.image_url ?? 'assets/no-image.png',
       nutrition_grades: p.nutrition_grades ?? 'unknown',
       allergens: p.allergens ? p.allergens.split(',').map((a: string) => a.trim()) : []
     };

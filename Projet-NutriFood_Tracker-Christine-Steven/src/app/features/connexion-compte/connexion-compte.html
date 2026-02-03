@@ -11,9 +11,9 @@
           <mat-label>Email</mat-label>
           <input matInput placeholder="example@example.com" formControlName="email" autocomplete="email" />
 
-          @if (form.controls['email'].touched && form.controls['email'].hasError('required')) {
+          @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
             <mat-error>L’email est obligatoire.</mat-error>
-          } @else if (form.controls['email'].touched && form.controls['email'].hasError('email')) {
+          } @else if (form.get('email')?.touched && form.get('email')?.hasError('email')) {
             <mat-error>Format d’email invalide.</mat-error>
           }
         </mat-form-field>
@@ -37,9 +37,9 @@
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
 
-          @if (form.controls['password'].touched && form.controls['password'].hasError('required')) {
+          @if (form.get('password')?.touched && form.get('password')?.hasError('required')) {
             <mat-error>Le mot de passe est obligatoire.</mat-error>
-          } @else if (form.controls['password'].touched && form.controls['password'].hasError('minlength')) {
+          } @else if (form.get('password')?.touched && form.get('password')?.hasError('minlength')) {
             <mat-error>Minimum 6 caractères.</mat-error>
           }
         </mat-form-field>

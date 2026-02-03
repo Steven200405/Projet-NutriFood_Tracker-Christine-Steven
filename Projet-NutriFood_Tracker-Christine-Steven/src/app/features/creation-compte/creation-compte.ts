@@ -15,7 +15,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -31,7 +30,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatSnackBarModule
   ],
   templateUrl: './creation-compte.html',
-  styleUrls: ['./creation-compte.scss']
+  styleUrl: './creation-compte.scss'
 })
 export class CreationCompte {
   public hidePassword = true;
@@ -48,6 +47,7 @@ export class CreationCompte {
     },
     { validators: confirmPasswordValidator }
   );
+
   constructor (private authService: AuthService, private routerService: Router, private snackBar: MatSnackBar) {}
 
   public async submit(): Promise<void> {
@@ -60,7 +60,7 @@ export class CreationCompte {
 
     try {
       await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value, this.form.controls['lastName'].value, this.form.controls['firstName'].value); // on crée le compte
-      this.routerService.navigateByUrl('/accueil');
+      this.routerService.navigate(['accueil']);
       this.snackBar.open('Compte créé avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {
       const msg = e instanceof Error ? e.message : '';

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormGroup, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
@@ -15,35 +15,52 @@ import { Question } from '../../models/question';
 import { CATEGORIES } from './data/categories';
 import { ServiceScoring } from '../../services/service-scoring';
 import { minArrayLengthValidator } from '../../validators/min-array-length';
+import { QuestionnaireService } from '../../core/storage/services/questionnaire.service';
+import { AuthService } from '../../core/storage/services/auth.service';
+import { Router } from '@angular/router';
+import { User } from '../../core/storage/models/user.model';
+import { ServiceForm } from '../../services/service-form';
+import { JsonPipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-questionnaire',
-  imports: [ReactiveFormsModule, MatCardModule, MatRadioModule, MatButtonModule, MatProgressBarModule, MatCheckboxModule, MatChipsModule, MatIconModule],
+  imports: [ReactiveFormsModule, JsonPipe, MatCardModule, MatRadioModule, MatButtonModule, MatProgressBarModule, MatCheckboxModule, MatChipsModule, MatIconModule],
   templateUrl: './questionnaire.html',
   styleUrl: './questionnaire.scss',
 })
-export class Questionnaire {
+export class Questionnaire implements OnInit{
 
   public categories: FoodCategories[] = CATEGORIES;
 
-
-  public formQuestions = new FormGroup({
-    q1: new FormControl<number | null>(null, Validators.required),
-    q2: new FormControl<number | null>(null, Validators.required),
-    q3: new FormControl<number | null>(null, Validators.required),
-    q4: new FormControl<number | null>(null, Validators.required),
-    q5: new FormControl<number | null>(null, Validators.required),
-    q6: new FormControl<string[]>([], { nonNullable: true, validators: [minArrayLengthValidator(1)] }),
-    q7: new FormControl<Produit[]>([], { nonNullable: true, validators: [minArrayLengthValidator(1)] }),
-  });
-
   public indexQuestionnaire: number = 0;
-
-  public resultsSearch: Produit[] = [];
   public questions: Question[] = QUESTIONS;
 
-  constructor(private oof: ServiceOpenFoodFact, private serviceScoring: ServiceScoring) { }
+  public activeCategoryName: string = ''; // Sélectionne de la catégorie active pour afficher les produits
+  public isLoadingQ7: boolean = false;
+
+  public searchResults: Produit[] = []; // La liste des produits récupérés pour la catégorie active
+  public selectedProductsByCategory: Record<string, Produit[]> = {}; // Pour chaque catégorie, la liste des produits sélectionnés
+
+  public user: User | null = null;
+  public formQuestions!: FormGroup;
+
+  constructor(private oof: ServiceOpenFoodFact, private serviceScoring: ServiceScoring, private questionnaireService: QuestionnaireService, private authService: AuthService, private router: Router, private formService: ServiceForm
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.formQuestions = this.formService.getFormQuestions();
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      this.router.navigate(['login']);
+    }
+    this.user = user;
+    const form = this.formService.getFormQuestions();
+    console.log('Form instance:', form);
+    console.log('Form ref equality:', form === this.formService.getFormQuestions());
+  }
+
 
   public getControl(id: string): FormControl {
     return this.formQuestions.get(id) as FormControl;
@@ -55,18 +72,16 @@ export class Questionnaire {
 
   // Méthode pour Q6
   public toggleCategory(name: string, checked: boolean): void {
-    const current = this.formQuestions.controls.q6.value;
-    const next = checked ? [...current, name] : current.filter(x => x !== name);
+    const current = this.formQuestions.get('q6')?.value;
+    const next = checked ? [...current, name] : current.filter((x: string) => x !== name);
     /* [...current, name] permet de sélectionner une catégorie et current.filter(x => x !== name) permet de désélectionner une catégorie */
-    this.formQuestions.controls.q6.setValue(next);
-    this.formQuestions.controls.q6.markAsTouched();
+    this.formQuestions.get('q6')?.setValue(next);
+    this.formQuestions.get('q6')?.markAsTouched();
   }
 
   public isCategoryChecked(name: string): boolean {
-    return this.formQuestions.controls.q6.value.includes(name);
+    return this.formQuestions.get('q6')?.value.includes(name);
   }
-
-
 
   public nextQuestion(): void {
     const id = this.currentQuestion.id;
@@ -79,14 +94,14 @@ export class Questionnaire {
       }
     }
     if (this.indexQuestionnaire === 5) {
-      if (this.formQuestions.controls.q6.invalid) {
-        this.formQuestions.controls.q6.markAsTouched();
+      if (this.formQuestions.get('q6')?.invalid) {
+        this.formQuestions.get('q6')?.markAsTouched();
         return;
       }
     }
     if (this.indexQuestionnaire === 6) {
-      if (this.formQuestions.controls.q7.invalid) {
-        this.formQuestions.controls.q7.markAsTouched();
+      if (this.formQuestions.get('q7')?.invalid) {
+        this.formQuestions.get('q7')?.markAsTouched();
         return;
       }
     }
@@ -101,15 +116,8 @@ export class Questionnaire {
     }
   }
 
-  //Méthodes pour Q7
-  public activeCategoryName: string = ''; // Sélectionne de la catégorie active pour afficher les produits
-  public isLoadingQ7 = false;
-
-  public searchResults: Produit[] = []; // La liste des produits récupérés pour la catégorie active
-  public selectedProductsByCategory: Record<string, Produit[]> = {}; // Pour chaque catégorie, la liste des produits sélectionnés
-
   public setActiveCategory(name: string): void {
-    if (!this.formQuestions.controls.q6.value.includes(name)) return;
+    if (!this.formQuestions.get('q6')?.value.includes(name)) return;
     this.activeCategoryName = name;
     if (!this.selectedProductsByCategory[name]) {
       this.selectedProductsByCategory[name] = [];
@@ -148,7 +156,7 @@ export class Questionnaire {
 
     this.selectedProductsByCategory[cat] = [...list, p];
     const all = Object.values(this.selectedProductsByCategory).flat();
-    this.formQuestions.controls.q7.setValue(all);
+    this.formQuestions.get('q7')?.setValue(all);
   }
 
   public removeProductQ7(code: string): void {
@@ -159,7 +167,7 @@ export class Questionnaire {
     this.selectedProductsByCategory[cat] = list.filter(p => p.code !== code);
 
     const all = Object.values(this.selectedProductsByCategory).flat(); // flat applatit en un seul tableau
-    this.formQuestions.controls.q7.setValue(all);
+    this.formQuestions.get('q7')?.setValue(all);
   }
 
   public isSelectedQ7(code: string): boolean {
@@ -175,16 +183,21 @@ export class Questionnaire {
     return (this.selectedProductsByCategory[cat]).length >= 3;
   }
 
-
+  public goToFoodSearch(): void {
+    this.formService.setIsGoToSearch(true)
+    this.router.navigate(['recherche']);
+  }
   public submit(): void {
-    if(this.formQuestions.invalid) {
+    if (this.formQuestions.invalid) {
       this.formQuestions.markAllAsTouched();
       return;
     }
-    alert("Le formulaire est valide");
-    alert(`Résultats :
-      - Score global (habitudes) : ${this.serviceScoring.getGlobalScore(this.formQuestions)}
-      - Nutri-score moyen des produits consommés : ${this.serviceScoring.getAverageFoodScore(this.formQuestions.controls.q7.value)}`);
+    this.questionnaireService.saveResult(
+      this.serviceScoring.getGlobalScore(this.formQuestions),
+      this.serviceScoring.getAverageFoodScore(this.formQuestions.get('q7')?.value),
+    );
+
+    this.router.navigate(['resultat']);
   }
 
 

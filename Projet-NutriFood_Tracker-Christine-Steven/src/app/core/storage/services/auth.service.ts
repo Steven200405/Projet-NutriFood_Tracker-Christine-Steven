@@ -3,23 +3,20 @@ import { LocalDbService } from './local-db.service';
 import { sha256 } from '../utils/crypto.util';
 import { User } from '../models/user.model';
 
-function uid(): string {
-  return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
-}
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   constructor(private db: LocalDbService) { }
 
-  getSession() {
+  public getSession(): { userId: string; email: string; loggedAt: string } | null {
     return this.db.getSession();
   }
 
-  logout() {
+  public logout(): void {
     this.db.clearSession();
   }
 
-  async register(email: string, password: string, lastName: string, firstName: string): Promise<User> {
+  public async register(email: string, password: string, lastName: string, firstName: string): Promise<User> {
     const users = this.db.getUsers();
 
     const normalizedEmail = email.trim().toLowerCase();
@@ -30,7 +27,7 @@ export class AuthService {
     const now = new Date().toISOString();
 
     const user: User = {
-      id: uid(),
+      id: this.uid(),
       firstName: firstName,
       lastName: lastName,
       email: normalizedEmail,
@@ -48,7 +45,7 @@ export class AuthService {
     return user;
   }
 
-  async login(email: string, password: string) {
+  public async login(email: string, password: string): Promise<boolean> {
     const users = this.db.getUsers();
     const normalizedEmail = email.trim().toLowerCase();
 
@@ -62,7 +59,7 @@ export class AuthService {
     return true;
   }
 
-  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  public async changePassword(currentPassword: string, newPassword: string): Promise<void> {
     const session = this.db.getSession();
     if (!session) throw new Error('NOT_LOGGED_IN');
 
@@ -83,10 +80,13 @@ export class AuthService {
     this.db.saveUsers(users);
   }
 
-  /* Récupère l'utilisateur complet du user connecté ? diff avec db.getSession()*/
-  getCurrentUser(): User | null {
+  public getCurrentUser(): User | null {
     const session = this.db.getSession();
     if (!session) return null;
     return this.db.getUsers().find(u => u.id === session.userId) ?? null;
   }
+
+  private uid(): string {
+  return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2);
+}
 }
