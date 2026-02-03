@@ -6,7 +6,7 @@ import { minArrayLengthValidator } from '../validators/min-array-length';
 @Injectable({
   providedIn: 'root',
 })
-export class ServiceForm {
+export class FormService {
   private formQuestions: FormGroup = new FormGroup({
     q1: new FormControl<number | null>(null, Validators.required),
     q2: new FormControl<number | null>(null, Validators.required),
@@ -19,7 +19,17 @@ export class ServiceForm {
 
   private isGoToSearch: boolean = false;
 
-  public getIsGoToSearch() {
+  private indexForm: number = 0;
+
+  public getIndexForm(): number {
+    return this.indexForm;
+  }
+
+  public setIndexForm(index: number): void {
+    this.indexForm = index
+  }
+
+  public getIsGoToSearch(): boolean {
     return this.isGoToSearch;
   }
 

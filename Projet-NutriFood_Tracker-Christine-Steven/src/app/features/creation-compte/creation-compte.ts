@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { confirmPasswordValidator } from '../../core/storage/validators/confirm-password.validator';
-import { AuthService } from '../../core/storage/services/auth.service';
+import { AuthService } from '../../core/storage/services/auth-service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
@@ -59,7 +59,7 @@ export class CreationCompte {
     }
 
     try {
-      await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value, this.form.controls['lastName'].value, this.form.controls['firstName'].value); // on crée le compte
+      await this.authService.register(this.form.get('email')?.value.trim(), this.form.get('password')?.value, this.form.get('lastName')?.value, this.form.get('firstName')?.value); // on crée le compte
       this.routerService.navigate(['accueil']);
       this.snackBar.open('Compte créé avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {

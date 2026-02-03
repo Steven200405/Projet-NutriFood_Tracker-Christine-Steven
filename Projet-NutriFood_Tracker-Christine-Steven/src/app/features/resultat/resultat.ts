@@ -5,8 +5,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router, RouterModule } from '@angular/router';
 import { QuestionnaireAnswers } from '../../core/storage/models/questionnaireAnswers';
-import { AuthService } from '../../core/storage/services/auth.service';
-import { QuestionnaireService } from '../../core/storage/services/questionnaire.service';
+import { AuthService } from '../../core/storage/services/auth-service';
+import { QuestionnaireService } from '../../core/storage/services/questionnaire-service';
 import { ResultatHistorique } from './resultat-historique/resultat-historique';
 import { ResultatQuestionnaire } from './resultat-questionnaire/resultat-questionnaire';
 

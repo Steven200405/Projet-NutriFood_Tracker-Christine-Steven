@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
+import { User } from '../models/user';
 import { QuestionnaireAnswers } from '../models/questionnaireAnswers';
-import { Session } from '../models/session.model';
+import { Session } from '../models/session';
 
 type StorageKey = 'nf_users' | 'nf_questionnaires' | 'nf_session';
 

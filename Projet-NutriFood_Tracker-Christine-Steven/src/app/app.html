@@ -1,6 +1,5 @@
 <div class="headbar">
-    <!-- HEADER (juste l'entête) -->
-    <app-header [title]="pageTitle" (menu)="sidenav.toggle()">
+    <app-header (menu)="sidenav.toggle()">
     </app-header>
 </div>
 
@@ -40,7 +39,6 @@
 
             <main class="p-4 main">
                 <router-outlet></router-outlet>
-
             </main>
 
 

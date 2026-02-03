@@ -1,0 +1,7 @@
+<mat-radio-group [formControl]="currentControl" class="d-block p-3 bg-white border rounded-3">
+    @for (opt of currentQuestion.options; track opt.label) {
+    <mat-radio-button [value]="opt.points" class="d-block py-1">
+        {{ opt.label }}
+    </mat-radio-button>
+    }
+</mat-radio-group>

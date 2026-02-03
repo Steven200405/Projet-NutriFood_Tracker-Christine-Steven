@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Header } from './shared/header/header';
 import { Footer } from './shared/footer/footer';
@@ -23,8 +23,5 @@ import { MatListModule } from '@angular/material/list';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('Projet-NutriFood_Tracker-Christine-Steven');
-  pageTitle = 'Accueil';
-
 }
 

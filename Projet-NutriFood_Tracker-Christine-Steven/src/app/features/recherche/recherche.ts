@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Produit } from '../../core/storage/models/produit';
-import { ServiceOpenFoodFact } from '../../core/storage/services/service-open-food-fact';
+import { OpenFoodFactService } from '../../core/storage/services/open-food-fact-service';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -9,8 +9,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { JsonPipe, NgClass, UpperCasePipe } from '@angular/common';
-import { ServiceForm } from '../../core/storage/services/service-form';
+import { NgClass, UpperCasePipe } from '@angular/common';
+import { FormService } from '../../core/storage/services/form-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -30,7 +30,7 @@ export class Recherche implements OnInit{
   public selectedProduct: Produit | null = null;
   public isGoToSearch: boolean = false;
 
-  constructor(private oof: ServiceOpenFoodFact, private formService: ServiceForm, private router: Router) { }
+  constructor(private oof: OpenFoodFactService, private formService: FormService, private router: Router) { }
 
   public ngOnInit() {
     this.isGoToSearch = this.formService.getIsGoToSearch();
@@ -41,7 +41,7 @@ export class Recherche implements OnInit{
       this.form.markAllAsTouched();
       return;
     }
-    const q = this.form.controls.query.value.trim();
+    const q = this.form.get('query')?.value.trim();
     if (!q) return;
     this.isLoading = true;
     this.hasSearched = true;

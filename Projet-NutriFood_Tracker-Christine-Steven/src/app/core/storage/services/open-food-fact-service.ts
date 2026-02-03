@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { Produit } from '../models/produit';
 import { OpenFoodFactSearchResponse } from '../models/open-food-fact-search-response';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceOpenFoodFact {
+export class OpenFoodFactService {
   private apiUrlv1 = 'https://world.openfoodfacts.org/cgi/search.pl'; // Plus optimisé pour une recherche libre 
   private apiUrlv2 = 'https://world.openfoodfacts.org/api/v2'; // Endpoint avec un filtrage plus pertinent 
 

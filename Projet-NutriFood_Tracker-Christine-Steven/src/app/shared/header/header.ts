@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../core/storage/services/auth.service';
+import { AuthService } from '../../core/storage/services/auth-service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -28,7 +28,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   styleUrl: './header.scss',
 })
 export class Header {
-  @Input() title: string = '';
   @Output() menu = new EventEmitter<void>();
 
   constructor( private auth: AuthService, private router: Router, private snackBar: MatSnackBar) { }
@@ -37,6 +36,7 @@ export class Header {
     this.menu.emit();
   }
 
+  //Création d'un getter pour savoir si l'user est connecté
   get isLoggedIn(): boolean {
     return this.auth.getSession() !== null;
   }

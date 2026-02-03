@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { forkJoin, tap } from 'rxjs';
-
+import { forkJoin } from 'rxjs';
 import { Produit } from '../../core/storage/models/produit';
-import { ServiceOpenFoodFact } from '../../core/storage/services/service-open-food-fact';
-import { LowerCasePipe, NgClass, UpperCasePipe } from '@angular/common';
-import { QuestionnaireService } from '../../core/storage/services/questionnaire.service';
+import { OpenFoodFactService } from '../../core/storage/services/open-food-fact-service';
+import { NgClass, UpperCasePipe } from '@angular/common';
+import { QuestionnaireService } from '../../core/storage/services/questionnaire-service';
 import { MatIconModule } from '@angular/material/icon';
 
 type ConseilItem = {
@@ -25,10 +24,7 @@ export class Conseil implements OnInit {
   public isLoading = true;
   public items: ConseilItem[] = [];
 
-  constructor(
-    private oof: ServiceOpenFoodFact,
-    private questionnaireService: QuestionnaireService
-  ) { }
+  constructor(private oof: OpenFoodFactService, private questionnaireService: QuestionnaireService) {}
 
   public ngOnInit(): void {
     const selected = this.questionnaireService.getMyLast()?.selectedProducts as Produit[] ?? [];
@@ -51,11 +47,7 @@ export class Conseil implements OnInit {
     // Lancer en simultané la recherche des alternatives pour tous les produits nécessaires avec forkJoin
     forkJoin(
       toImprove.map(i =>
-        this.oof.getTopAlternativesProducts(i.product).pipe(
-          tap(alts =>
-            console.log('[Conseil] alternatives for', i.product.code, '=>', alts.length)
-          )
-        )
+        this.oof.getTopAlternativesProducts(i.product)
       )
     ).subscribe({
       next: list => {
