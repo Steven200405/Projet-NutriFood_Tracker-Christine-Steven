@@ -11,7 +11,7 @@
           <mat-form-field appearance="outline" class="full">
             <mat-label>Nom</mat-label>
             <input matInput placeholder="Dupont" formControlName="lastName" autocomplete="family-name" />
-            @if (form.controls['lastName'].touched && form.controls['lastName'].hasError('required')) {
+            @if (form.get('lastName')?.touched && form.get('lastName')?.hasError('required')) {
               <mat-error>Le nom est obligatoire.</mat-error>
             }
           </mat-form-field>
@@ -19,7 +19,7 @@
           <mat-form-field appearance="outline" class="full">
             <mat-label>Prénom</mat-label>
             <input matInput placeholder="Jean" formControlName="firstName" autocomplete="given-name" />
-            @if (form.controls['firstName'].touched && form.controls['firstName'].hasError('required')) {
+            @if (form.get('firstName')?.touched && form.get('firstName')?.hasError('required')) {
               <mat-error>Le prénom est obligatoire.</mat-error>
             }
           </mat-form-field>
@@ -29,9 +29,9 @@
           <mat-label>Email</mat-label>
           <input matInput placeholder="example@example.com" formControlName="email" autocomplete="email" />
 
-          @if (form.controls['email'].touched && form.controls['email'].hasError('required')) {
+          @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
             <mat-error>L’email est obligatoire.</mat-error>
-          } @else if (form.controls['email'].touched && form.controls['email'].hasError('email')) {
+          } @else if (form.get('email')?.touched && form.get('email')?.hasError('email')) {
             <mat-error>Format d’email invalide.</mat-error>
           }
         </mat-form-field>
@@ -56,9 +56,9 @@
             <!-- à chaque clique, l'icône "oeil" est barré ou ouvert-->
           </button>
 
-          @if (form.controls['password'].touched && form.controls['password'].hasError('required')) {
+          @if (form.get('password')?.touched && form.get('password')?.hasError('required')) {
             <mat-error>Le mot de passe est obligatoire.</mat-error>
-          } @else if (form.controls['password'].touched && form.controls['password'].hasError('minlength')) {
+          } @else if (form.get('password')?.touched && form.get('password')?.hasError('minlength')) {
             <mat-error>Minimum 6 caractères.</mat-error>
           }
         </mat-form-field>

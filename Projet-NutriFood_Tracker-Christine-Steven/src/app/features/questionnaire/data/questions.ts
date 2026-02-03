@@ -4,6 +4,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q1',
         title: 'À quelle fréquence mangez-vous des fruits ?',
+        type: 'radio',
         options: [
             { label: '2 fois par jour ou plus', points: 10 },
             { label: '1 fois par jour', points: 8 },
@@ -15,6 +16,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q2',
         title: 'A quelle fréquence mangez-vous des légumes ?',
+        type: 'radio',
         options: [
             { label: '2 fois par jour ou plus', points: 10 },
             { label: '1 fois par jour', points: 8 },
@@ -26,6 +28,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q3',
         title: ' À quelle fréquence consommez-vous des féculents / produits céréaliers ? (pain, pâtes, riz, pommes de terre, céréales…)',
+        type: 'radio',
         options: [
             { label: 'A chaque repas (ou presque)', points: 10 },
             { label: '1 fois par jour', points: 8 },
@@ -37,6 +40,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q4',
         title: 'Combien d\'eau buvez-vous par jour ?',
+        type: 'radio',
         options: [
             { label: 'Plus de 1,5L', points: 10 },
             { label: '1L à 1,5L', points: 7 },
@@ -47,6 +51,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q5',
         title: 'À quelle fréquence consommez-vous des aliments transformés (plats préparés, snacks industriels, etc.) ?',
+        type: 'radio',
         options: [
             { label: 'Rarement/Jamais', points: 10 },
             { label: '1 à 2 fois par semaine', points: 7 },
@@ -57,6 +62,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q6',
         title: 'Quels types d\'aliments consommez-vous le plus souvent ?',
+        type: 'checkbox',
         options: [
             { label: 'Fruits et légumes', points: 0 },
             { label: 'Céréales et féculents', points: 0 },
@@ -72,6 +78,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q7',
         title: 'Recherchez et ajoutez les produits que vous consommez (Open Food Facts)',
+        type: 'search',
         options: [],
     }
 ];

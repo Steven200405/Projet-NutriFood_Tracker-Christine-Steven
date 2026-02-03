@@ -47,6 +47,7 @@ export class CreationCompte {
     },
     { validators: confirmPasswordValidator }
   );
+
   constructor (private authService: AuthService, private routerService: Router, private snackBar: MatSnackBar) {}
 
   public async submit(): Promise<void> {
@@ -59,7 +60,7 @@ export class CreationCompte {
 
     try {
       await this.authService.register(this.form.controls['email'].value.trim(), this.form.controls['password'].value, this.form.controls['lastName'].value, this.form.controls['firstName'].value); // on crée le compte
-      this.routerService.navigateByUrl('/accueil');
+      this.routerService.navigate(['accueil']);
       this.snackBar.open('Compte créé avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {
       const msg = e instanceof Error ? e.message : '';

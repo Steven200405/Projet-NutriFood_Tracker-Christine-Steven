@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Produit } from '../../models/produit';
 import { ServiceOpenFoodFact } from '../../services/service-open-food-fact';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +9,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NgClass, UpperCasePipe } from '@angular/common';
+import { JsonPipe, NgClass, UpperCasePipe } from '@angular/common';
+import { ServiceForm } from '../../services/service-form';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recherche',
@@ -17,7 +19,7 @@ import { NgClass, UpperCasePipe } from '@angular/common';
   templateUrl: './recherche.html',
   styleUrl: './recherche.scss',
 })
-export class Recherche {
+export class Recherche implements OnInit{
   form = new FormGroup({
     query: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(2)] }),
   });
@@ -26,9 +28,13 @@ export class Recherche {
   public isLoading: boolean = false;
   public hasSearched: boolean = false;
   public selectedProduct: Produit | null = null;
+  public isGoToSearch: boolean = false;
 
+  constructor(private oof: ServiceOpenFoodFact, private formService: ServiceForm, private router: Router) { }
 
-  constructor(private oof: ServiceOpenFoodFact) { }
+  public ngOnInit() {
+    this.isGoToSearch = this.formService.getIsGoToSearch();
+  }
 
   public onSearch(): void {
     if (this.form.invalid) {
@@ -77,6 +83,21 @@ export class Recherche {
   }
   public allergensText(allergens?: string[]): string {
     return allergens && allergens.length > 0 ? allergens.join(', ') : 'Aucun allergène connu';
+  }
+
+  public addProduct(p: Produit): void {
+    const form = this.formService.getFormQuestions();
+    const ctrl = form.get('q7') as FormControl<Produit[]>;
+    const current = ctrl.value ?? [];
+
+    if (current.some(x => x.code === p.code)) return;
+    ctrl.setValue([...current, p]);
+    this.closeDetail();
+  }
+
+  public backToQuestionnary(): void {
+    this.formService.setIsGoToSearch(false);
+    this.router.navigate(["questionnaire"])
   }
 
 }

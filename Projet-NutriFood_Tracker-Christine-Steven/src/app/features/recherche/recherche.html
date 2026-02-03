@@ -71,7 +71,10 @@
             {{ selectedProduct.brand || 'Marque inconnue' }}
           </mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content class="d-flex gap-4 align-items-center justify-content-center mt-3 flex-column flex-md-row text-center text-md-start" >
+
+        <mat-card-content class="position-relative d-flex gap-4 align-items-center justify-content-center mt-3
+             flex-column flex-md-row text-center text-md-start pb-5">
+
           <img [src]="selectedProduct.image_url || 'assets/no-image.png'" alt=""
             class="rounded product-thumb-lg flex-shrink-0" />
 
@@ -90,15 +93,33 @@
 
             <div class="mb-2">
               <span class="fw-semibold">Allergènes :</span>
-              {{allergensText(selectedProduct.allergens)}}
+              {{ allergensText(selectedProduct.allergens) }}
             </div>
           </div>
+          @if(this.isGoToSearch){
+          <div class="position-absolute bottom-0 end-0 m-3">
+            <button type="button" class="button-link height-reduced" (click)="addProduct(selectedProduct)">
+              Ajouter au questionnaire
+            </button>
+          </div>
+          }
         </mat-card-content>
       </mat-card>
     </div>
-    <button type="button" class= "button-link" (click)="closeDetail()">
-      Retour aux résultats
-    </button>
     }
+    <div class="mt-5 d-flex justify-content-end">
+      @if(selectedProduct !== null){
+      <button type="button" class="button-link" (click)="closeDetail()">
+        Retour aux résultats
+      </button>
+      }
+      <span class="flex-grow-1"></span>
+      @if(this.isGoToSearch){
+      <button type="button" class="button-link" (click)="backToQuestionnary()">
+        Retour au questionnaire
+      </button>
+      }
+    </div>
+
   </mat-card-content>
 </mat-card>
