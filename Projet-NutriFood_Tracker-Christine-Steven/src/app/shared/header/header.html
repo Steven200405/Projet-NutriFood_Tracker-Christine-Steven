@@ -1,22 +1,29 @@
 <header>
-    <mat-toolbar color="primary" class="d-flex align-items-center">
-        <button mat-icon-button (click)="onMenuClick()" aria-label="Menu">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span class="ms-2 fw-semibold fs-5">{{ title }}</span>
+    <mat-toolbar color="primary">
+        <div class="toolbar-left">
+            <button mat-icon-button (click)="onMenuClick()" aria-label="Menu">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
 
-        <span class="flex-grow-1"></span>
 
-        <button mat-icon-button class = "btn" routerLink="recherche">
-            <mat-icon class="icon-search icon">search</mat-icon>
-        </button>
+        <a routerLink="accueil" class="toolbar-center" aria-label="Accueil">
+            <img src="assets/NutriFoodTarcker.png" alt="NutriFood Tracker" class="logo">
+        </a>
 
-        <button mat-icon-button class="btn" [matMenuTriggerFor]="profileMenu" aria-label="Menu profil">
-            <mat-icon class="icon">account_circle</mat-icon>
-        </button>
+        <div class="toolbar-right">
+            <button mat-icon-button class="btn" routerLink="recherche">
+                <mat-icon class="icon-search icon">search</mat-icon>
+            </button>
 
-        <mat-menu #profileMenu = "matMenu">
-        @if (isLoggedIn) {
+            <button mat-icon-button class="btn" [matMenuTriggerFor]="profileMenu" aria-label="Menu profil">
+                <mat-icon class="icon">account_circle</mat-icon>
+            </button>
+        </div>
+
+
+        <mat-menu #profileMenu="matMenu">
+            @if (isLoggedIn) {
             <button mat-menu-item (click)="goProfile()">
                 <mat-icon>person</mat-icon>
                 <span>Profil</span>
@@ -26,12 +33,12 @@
                 <mat-icon>logout</mat-icon>
                 <span>Logout</span>
             </button>
-        } @else {
+            } @else {
             <button mat-menu-item (click)="goLogin()">
                 <mat-icon>login</mat-icon>
                 <span>Login</span>
             </button>
-        }
+            }
         </mat-menu>
     </mat-toolbar>
 </header>
