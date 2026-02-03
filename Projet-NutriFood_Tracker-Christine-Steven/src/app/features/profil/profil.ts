@@ -10,12 +10,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ProfileService } from '../../core/storage/services/profile.service';
-import { AuthService } from '../../core/storage/services/auth.service';
-import { Allergy, DietType, NutritionGoal, PhysicalActivity, User } from '../../core/storage/models/user.model';
+import { ProfileService } from '../../core/storage/services/profile-service';
+import { AuthService } from '../../core/storage/services/auth-service';
+import { Allergy, DietType, NutritionGoal, PhysicalActivity, User } from '../../core/storage/models/user';
 import { firstValueFrom } from 'rxjs';
 import { ChangePasswordPayload, ConfirmCurrentPasswordDialog } from './confirmDialog/confirm-current-password.dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NUTRITION_GOALS } from '../../core/storage/data/nutrition_goals';
+import { DIET_TYPE } from '../../core/storage/data/diet_type';
+import { PHYSICAL_ACTIVITY } from '../../core/storage/data/physical_activity';
+import { ALLERGIES } from '../../core/storage/data/allergies';
+
 
 type ProfileForm = {
   lastName: FormControl<string>;
@@ -48,15 +53,15 @@ export class Profil implements OnInit{
   public user: User | null = null;
   public editMode: boolean = false;
 
-  public nutritionGoals: NutritionGoal[] = ['PERTE_POIDS', 'PRISE_MASSE', 'MAINTIEN', 'SANTE'];
-  public diets: DietType[] = ['OMNIVORE', 'VEGETARIEN', 'VEGAN', 'PESCETARIEN', 'SANS_PORC', 'SANS_GLUTEN'];
-  public activities: PhysicalActivity[] = ['FAIBLE', 'MODEREE', 'ELEVEE'];
-  public allergiesList: Allergy[] = ['GLUTEN', 'LACTOSE', 'ARACHIDE', 'FRUITS_COQUE', 'OEUF', 'SOJA', 'POISSON', 'CRUSTACES'];
+  public nutritionGoals: NutritionGoal[] = NUTRITION_GOALS;
+  public diets: DietType[] = DIET_TYPE;
+  public activities: PhysicalActivity[] = PHYSICAL_ACTIVITY;
+  public allergiesList: Allergy[] =  ALLERGIES;
 
   public form = new FormGroup<ProfileForm>({
     lastName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl({ value: '', disabled: true } as any, { nonNullable: true }),
+    email: new FormControl({ value: '', disabled: true }, { nonNullable: true }),
     nutritionGoal: new FormControl<NutritionGoal | null>(null),
     diet: new FormControl<DietType | null>(null),
     physicalActivity: new FormControl<PhysicalActivity | null>(null),
@@ -97,7 +102,7 @@ export class Profil implements OnInit{
   public startEdit(): void {
     this.editMode = true;
     this.form.enable();
-    this.form.controls.email.disable();
+    this.form.get('email')?.disable();
   }
 
   public cancelEdit(): void {
@@ -115,12 +120,12 @@ export class Profil implements OnInit{
     }
 
     const updated = this.profile.updateConnectedUser({
-      lastName: this.form.controls.lastName.value.trim(),
-      firstName: this.form.controls.firstName.value.trim(),
-      nutritionGoal: this.form.controls.nutritionGoal.value,
-      diet: this.form.controls.diet.value,
-      physicalActivity: this.form.controls.physicalActivity.value,
-      allergies: this.form.controls.allergies.value,
+      lastName: this.form.get('lastName')?.value.trim(),
+      firstName: this.form.get('firstName')?.value.trim(),
+      nutritionGoal: this.form.get('nutritionGoal')?.value,
+      diet: this.form.get('diet')?.value,
+      physicalActivity: this.form.get('physicalActivity')?.value,
+      allergies: this.form.get('allergies')?.value,
     });
 
     this.user = updated;

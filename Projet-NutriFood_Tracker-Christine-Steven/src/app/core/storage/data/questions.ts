@@ -77,7 +77,7 @@ export const QUESTIONS: Question[] = [
     },
     {
         id: 'q7',
-        title: 'Recherchez et ajoutez les produits que vous consommez (Open Food Facts)',
+        title: 'Recherchez et ajoutez les produits que vous consommez le plus souvent',
         type: 'search',
         options: [],
     }

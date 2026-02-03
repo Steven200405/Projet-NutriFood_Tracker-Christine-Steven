@@ -1,0 +1,8 @@
+<div class="d-block p-3 bg-white border rounded-3">
+    @for (opt of currentQuestion.options; track opt.label) {
+    <mat-checkbox [checked]="isCategoryChecked(opt.label)" (change)="toggleCategory(opt.label, $event.checked)"
+        class="d-block py-1">
+        {{ opt.label }}
+    </mat-checkbox>
+    }
+</div>

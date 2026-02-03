@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { QuestionnaireAnswers } from '../../../core/storage/models/questionnaireAnswers';
 import { DatePipe, NgClass } from '@angular/common';
-import { NutriClassPipe } from '../../../core/storage/utils/nutri-class-pipe-pipe';
+import { NutriClassPipe } from '../../../core/storage/pipe/nutri-class-pipe';
 
 @Component({
   selector: 'app-resultat-historique',

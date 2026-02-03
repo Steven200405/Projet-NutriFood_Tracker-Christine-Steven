@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LocalDbService } from './local-db.service';
+import { LocalDbService } from './local-db-service';
 import { QuestionnaireAnswers } from '../models/questionnaireAnswers';
 
 @Injectable({ providedIn: 'root' })

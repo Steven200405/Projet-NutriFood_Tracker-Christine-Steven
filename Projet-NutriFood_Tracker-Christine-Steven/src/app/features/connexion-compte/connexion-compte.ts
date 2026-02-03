@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AuthService } from '../../core/storage/services/auth.service';
+import { AuthService } from '../../core/storage/services/auth-service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
@@ -51,7 +51,7 @@ export class ConnexionCompte {
     }
 
     try {
-      await this.auth.login(this.form.controls['email'].value.trim(), this.form.controls['password'].value);
+      await this.auth.login(this.form.get('email')?.value.trim(), this.form.get('password')?.value);
       this.router.navigate(['accueil']);
       this.snackBar.open('Connecté avec succès !', 'OK', {duration: 3000});
     } catch (e: any) {

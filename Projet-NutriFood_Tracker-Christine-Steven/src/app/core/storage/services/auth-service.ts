@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { LocalDbService } from './local-db.service';
+import { LocalDbService } from './local-db-service';
 import { sha256 } from '../utils/crypto.util';
-import { User } from '../models/user.model';
+import { User } from '../models/user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

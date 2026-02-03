@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 @Injectable({
   providedIn: 'root',
 })
-export class ServiceScoring {
+export class ScoringService {
   public getGlobalScore(formQuestions: FormGroup): number {
     let scoreGlobal = 0;
     for (let i = 1; i <= 5; i++) {
